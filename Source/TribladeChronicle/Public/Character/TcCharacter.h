@@ -7,6 +7,7 @@
 #include "GameFramework/Character.h"
 #include "TcCharacter.generated.h"
 
+class UTcHealthSet;
 class UAttributeSet;
 class UTcAbilitySet;
 class UTcAbilitySystemComponent;
@@ -24,8 +25,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn Data")
 	TObjectPtr<UTcAbilitySet> AbilitySet;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn Data")
-	TObjectPtr<UAttributeSet> AttributeSet;
+	UPROPERTY()
+	TObjectPtr<const UTcHealthSet> HealthSet;
 
 public:
 	ATcCharacter();

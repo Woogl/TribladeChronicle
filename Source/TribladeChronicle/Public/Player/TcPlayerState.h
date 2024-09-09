@@ -9,7 +9,7 @@
 
 class UTcAbilitySystemComponent;
 class UAbilitySystemComponent;
-class UAttributeSet;
+class UTcHealthSet;
 
 /**
  * 
@@ -26,12 +26,14 @@ public:
 	UTcAbilitySystemComponent* GetTcAbilitySystemComponent() const { return AbilitySystemComponent; }
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
-	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
+	//UAttributeSet* GetAttributeSet() const { return AttributeSet; }
+	TObjectPtr<const UTcHealthSet> GetHealthSet() const { return HealthSet; }
 	
 private:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UTcAbilitySystemComponent> AbilitySystemComponent;
 
-	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<UAttributeSet> AttributeSet;
+	// Health attribute set used by this actor.
+	UPROPERTY()
+	TObjectPtr<const UTcHealthSet> HealthSet;
 };

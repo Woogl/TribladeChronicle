@@ -3,10 +3,12 @@
 
 #include "Character/TcCharacter.h"
 
+#include "TcLogs.h"
 #include "AbilitySystem/TcAbilitySystemComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Player/TcPlayerState.h"
+#include "AbilitySystem/Attributes/TcHealthSet.h"
 
 ATcCharacter::ATcCharacter()
 {
@@ -56,6 +58,11 @@ void ATcCharacter::InitAbilitySystem()
 	check(TcPlayerState);
 	TcPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(TcPlayerState, this);
 	AbilitySystemComponent = TcPlayerState->GetTcAbilitySystemComponent();
-	AttributeSet = TcPlayerState->GetAttributeSet();
+	HealthSet = AbilitySystemComponent->GetSet<UTcHealthSet>();
+	if (!HealthSet)
+	{
+		UE_LOG(LogTc, Error, TEXT("LyraHealthComponent: Cannot initialize health component for owner [%s] with NULL health set on the ability system."), *GetNameSafe(Owner));
+		return;
+	}
 }
 

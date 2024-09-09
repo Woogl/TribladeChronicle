@@ -4,6 +4,7 @@
 #include "Player/TcPlayerState.h"
 
 #include "AbilitySystem/TcAbilitySystemComponent.h"
+#include "AbilitySystem/Attributes/TcHealthSet.h"
 
 ATcPlayerState::ATcPlayerState()
 {
@@ -13,7 +14,7 @@ ATcPlayerState::ATcPlayerState()
 	AbilitySystemComponent->SetIsReplicated(true);
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
 
-	AttributeSet = CreateDefaultSubobject<UAttributeSet>("AttributeSet");
+	HealthSet = CreateDefaultSubobject<UTcHealthSet>("AttributeSet");
 }
 
 UAbilitySystemComponent* ATcPlayerState::GetAbilitySystemComponent() const
