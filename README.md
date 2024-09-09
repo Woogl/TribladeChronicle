@@ -1,4 +1,8 @@
-# TribladeChronicle
+# Triblade Chronicle
+<img src="https://github.com/user-attachments/assets/4b70419e-9f91-4cfb-8267-a2415ccecdd2" height="400" />
+
+*(Temporary BI)*
+
 I am developing an action RPG game using Unreal Engine 5.4
 
 # Progress History
