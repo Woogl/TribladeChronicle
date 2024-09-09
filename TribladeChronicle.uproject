@@ -7,7 +7,12 @@
 		{
 			"Name": "TribladeChronicle",
 			"Type": "Runtime",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"GameplayAbilities",
+				"Engine",
+				"EnhancedInput"
+			]
 		}
 	],
 	"Plugins": [
