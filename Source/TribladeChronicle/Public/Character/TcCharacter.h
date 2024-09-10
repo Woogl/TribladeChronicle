@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright Woogle. All Rights Reserved.
 
 #pragma once
 
@@ -7,11 +7,13 @@
 #include "GameFramework/Character.h"
 #include "TcCharacter.generated.h"
 
-class UTcHealthSet;
+class ATcPlayerController;
+class ATcPlayerState;
 class UAttributeSet;
 class UTcAbilitySet;
 class UTcAbilitySystemComponent;
 class UAbilitySystemComponent;
+class UTcHealthComponent;
 
 UCLASS(Abstract)
 class TRIBLADECHRONICLE_API ATcCharacter : public ACharacter,  public IAbilitySystemInterface
@@ -21,22 +23,40 @@ class TRIBLADECHRONICLE_API ATcCharacter : public ACharacter,  public IAbilitySy
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Ability", meta = (AllowPrivateAccess = "true"))
 	TWeakObjectPtr<UTcAbilitySystemComponent> AbilitySystemComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "TC|Character", Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UTcHealthComponent> HealthComponent;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn Data")
 	TObjectPtr<UTcAbilitySet> AbilitySet;
 
-	UPROPERTY()
-	TObjectPtr<const UTcHealthSet> HealthSet;
-
 public:
 	ATcCharacter();
+
+	UFUNCTION(BlueprintCallable, Category = "TC|Character")
+	ATcPlayerController* GetTcPlayerController() const;
+
+	UFUNCTION(BlueprintCallable, Category = "TC|Character")
+	ATcPlayerState* GetTcPlayerState() const;
 	
 	// IAbilitySystemInterface
-	UFUNCTION(BlueprintCallable, Category = "Tc|Character")
+	UFUNCTION(BlueprintCallable, Category = "TC|Character")
 	UTcAbilitySystemComponent* GetTcAbilitySystemComponent() const;
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
+	void ToggleCrouch();
 
 protected:
 	virtual void BeginPlay() override;
 	void InitAbilitySystem();
+
+	// Begins the death sequence for the character (disables collision, disables movement, etc...)
+	UFUNCTION()
+	virtual void OnDeathStarted(AActor* OwningActor);
+
+	// Ends the death sequence for the character (detaches controller, destroys pawn, etc...)
+	UFUNCTION()
+	virtual void OnDeathFinished(AActor* OwningActor);
+
+	void DisableMovementAndCollision();
 };

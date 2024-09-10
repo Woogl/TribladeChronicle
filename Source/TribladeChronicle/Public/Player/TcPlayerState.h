@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright Woogle. All Rights Reserved.
 
 #pragma once
 
@@ -22,7 +22,7 @@ class TRIBLADECHRONICLE_API ATcPlayerState : public APlayerState, public IAbilit
 public:
 	ATcPlayerState();
 
-	UFUNCTION(BlueprintCallable, Category = "Tc|PlayerState")
+	UFUNCTION(BlueprintCallable, Category = "TC|PlayerState")
 	UTcAbilitySystemComponent* GetTcAbilitySystemComponent() const { return AbilitySystemComponent; }
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 

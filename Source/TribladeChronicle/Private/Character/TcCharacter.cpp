@@ -1,35 +1,62 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright Woogle. All Rights Reserved.
 
 
 #include "Character/TcCharacter.h"
 
 #include "TcLogs.h"
 #include "AbilitySystem/TcAbilitySystemComponent.h"
+#include "Character/TcHealthComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Player/TcPlayerController.h"
 #include "Player/TcPlayerState.h"
-#include "AbilitySystem/Attributes/TcHealthSet.h"
 
 ATcCharacter::ATcCharacter()
 {
-	PrimaryActorTick.bCanEverTick = true;
+	// Avoid ticking characters if possible.
+	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bStartWithTickEnabled = false;
 
-	PrimaryActorTick.bCanEverTick = true;
+	GetCapsuleComponent()->InitCapsuleSize(40.f, 90.0f);
+	GetCapsuleComponent()->SetCollisionProfileName(TEXT("TcPawnCapsule"));
 
-	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-		
+	GetMesh()->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
+	GetMesh()->SetCollisionProfileName(TEXT("TcPawnMesh"));
+
+	GetCharacterMovement()->GravityScale = 1.0f;
+	GetCharacterMovement()->MaxAcceleration = 2400.0f;
+	GetCharacterMovement()->BrakingFrictionFactor = 1.0f;
+	GetCharacterMovement()->BrakingFriction = 6.0f;
+	GetCharacterMovement()->GroundFriction = 8.0f;
+	GetCharacterMovement()->BrakingDecelerationWalking = 1400.0f;
+	GetCharacterMovement()->bUseControllerDesiredRotation = false;
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
+	GetCharacterMovement()->bAllowPhysicsRotationDuringAnimRootMotion = false;
+	GetCharacterMovement()->GetNavAgentPropertiesRef().bCanCrouch = true;
+	GetCharacterMovement()->bCanWalkOffLedgesWhenCrouching = true;
+	GetCharacterMovement()->SetCrouchedHalfHeight(65.0f);
+
+	HealthComponent = CreateDefaultSubobject<UTcHealthComponent>(TEXT("HealthComponent"));
+	HealthComponent->OnDeathStarted.AddDynamic(this, &ThisClass::OnDeathStarted);
+	HealthComponent->OnDeathFinished.AddDynamic(this, &ThisClass::OnDeathFinished);
+
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
 
-	GetCharacterMovement()->bOrientRotationToMovement = true;
-	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
-	GetCharacterMovement()->JumpZVelocity = 700.f;
-	GetCharacterMovement()->AirControl = 0.35f;
-	GetCharacterMovement()->MaxWalkSpeed = 500.f;
-	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
-	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
-	GetCharacterMovement()->BrakingDecelerationFalling = 1500.0f;
+	BaseEyeHeight = 80.0f;
+	CrouchedEyeHeight = 50.0f;
+}
+
+ATcPlayerController* ATcCharacter::GetTcPlayerController() const
+{
+	return CastChecked<ATcPlayerController>(Controller, ECastCheckedType::NullAllowed);
+}
+
+ATcPlayerState* ATcCharacter::GetTcPlayerState() const
+{
+	return CastChecked<ATcPlayerState>(GetPlayerState(), ECastCheckedType::NullAllowed);
 }
 
 UTcAbilitySystemComponent* ATcCharacter::GetTcAbilitySystemComponent() const
@@ -46,6 +73,18 @@ UAbilitySystemComponent* ATcCharacter::GetAbilitySystemComponent() const
 	return nullptr;
 }
 
+void ATcCharacter::ToggleCrouch()
+{
+	if (bIsCrouched || GetCharacterMovement()->bWantsToCrouch)
+	{
+		UnCrouch();
+	}
+	else if (GetCharacterMovement()->IsMovingOnGround())
+	{
+		Crouch();
+	}
+}
+
 void ATcCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -58,11 +97,38 @@ void ATcCharacter::InitAbilitySystem()
 	check(TcPlayerState);
 	TcPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(TcPlayerState, this);
 	AbilitySystemComponent = TcPlayerState->GetTcAbilitySystemComponent();
-	HealthSet = AbilitySystemComponent->GetSet<UTcHealthSet>();
-	if (!HealthSet)
+	HealthComponent->InitializeWithAbilitySystem(AbilitySystemComponent.Get());
+}
+
+void ATcCharacter::OnDeathStarted(AActor* OwningActor)
+{
+	DisableMovementAndCollision();
+}
+
+void ATcCharacter::OnDeathFinished(AActor* OwningActor)
+{
+	if (GetLocalRole() == ROLE_Authority)
 	{
-		UE_LOG(LogTc, Error, TEXT("LyraHealthComponent: Cannot initialize health component for owner [%s] with NULL health set on the ability system."), *GetNameSafe(Owner));
-		return;
+		DetachFromControllerPendingDestroy();
+		SetLifeSpan(0.1f);
 	}
+
+	SetActorHiddenInGame(true);
+}
+
+void ATcCharacter::DisableMovementAndCollision()
+{
+	if (Controller)
+	{
+		Controller->SetIgnoreMoveInput(true);
+	}
+
+	UCapsuleComponent* CapsuleComp = GetCapsuleComponent();
+	check(CapsuleComp);
+	CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	CapsuleComp->SetCollisionResponseToAllChannels(ECR_Ignore);
+
+	GetCharacterMovement()->StopMovementImmediately();
+	GetCharacterMovement()->DisableMovement();
 }
 

@@ -1,9 +1,10 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright Woogle. All Rights Reserved.
 
 
 #include "Character/TcHeroCharacter.h"
 
 #include "EnhancedInputSubsystems.h"
+#include "TcGameplayTags.h"
 #include "AbilitySystem/TcAbilitySet.h"
 #include "AbilitySystem/TcAbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
@@ -59,8 +60,8 @@ void ATcHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	{
 		TcInputComp->BindAbilityActions(InputConfig, this, &ThisClass::Input_AbilityInputPressed, &ThisClass::Input_AbilityInputReleased);
 		
-		TcInputComp->BindNativeAction(InputConfig, FGameplayTag::RequestGameplayTag(FName("Input.Move")), ETriggerEvent::Triggered, this, &ThisClass::Input_Move, false);
-		TcInputComp->BindNativeAction(InputConfig, FGameplayTag::RequestGameplayTag(FName("Input.Look")), ETriggerEvent::Triggered, this, &ThisClass::Input_Look, false);
+		TcInputComp->BindNativeAction(InputConfig, TcGameplayTags::INPUT_MOVE, ETriggerEvent::Triggered, this, &ThisClass::Input_Move, false);
+		TcInputComp->BindNativeAction(InputConfig, TcGameplayTags::INPUT_LOOK, ETriggerEvent::Triggered, this, &ThisClass::Input_Look, false);
 	}
 }
 

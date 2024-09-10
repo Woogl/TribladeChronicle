@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright Woogle. All Rights Reserved.
 
 
 #include "Player/TcPlayerState.h"
@@ -8,13 +8,13 @@
 
 ATcPlayerState::ATcPlayerState()
 {
-	NetUpdateFrequency = 100.f;
-	
 	AbilitySystemComponent = CreateDefaultSubobject<UTcAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 	AbilitySystemComponent->SetIsReplicated(true);
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
 
 	HealthSet = CreateDefaultSubobject<UTcHealthSet>("AttributeSet");
+
+	NetUpdateFrequency = 100.f;
 }
 
 UAbilitySystemComponent* ATcPlayerState::GetAbilitySystemComponent() const

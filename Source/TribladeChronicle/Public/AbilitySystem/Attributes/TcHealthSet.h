@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright Woogle. All Rights Reserved.
 
 #pragma once
 
@@ -48,12 +48,12 @@ protected:
 	void ClampAttribute(const FGameplayAttribute& Attribute, float& NewValue) const;
 
 private:
-	// The current health attribute.  The health will be capped by the max health attribute.  Health is hidden from modifiers so only executions can modify it.
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category = "Tc|Health", Meta = (HideFromModifiers, AllowPrivateAccess = true))
+	// The current health attribute.  The health will be capped by the max health attribute.
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category = "TC|Health", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData Health;
 
 	// The current max health attribute.  Max health is an attribute since gameplay effects can modify it.
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxHealth, Category = "Tc|Health", Meta = (AllowPrivateAccess = true))
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxHealth, Category = "TC|Health", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData MaxHealth;
 
 	// Used to track when the health reaches 0.
@@ -68,10 +68,10 @@ private:
 	// -------------------------------------------------------------------
 
 	// Incoming healing. This is mapped directly to +Health
-	UPROPERTY(BlueprintReadOnly, Category="Tc|Health", Meta=(AllowPrivateAccess=true))
+	UPROPERTY(BlueprintReadOnly, Category="TC|Health", Meta=(AllowPrivateAccess=true))
 	FGameplayAttributeData Healing;
 
 	// Incoming damage. This is mapped directly to -Health
-	UPROPERTY(BlueprintReadOnly, Category="Tc|Health", Meta=(HideFromModifiers, AllowPrivateAccess=true))
+	UPROPERTY(BlueprintReadOnly, Category="TC|Health", Meta=(HideFromModifiers, AllowPrivateAccess=true))
 	FGameplayAttributeData Damage;
 };

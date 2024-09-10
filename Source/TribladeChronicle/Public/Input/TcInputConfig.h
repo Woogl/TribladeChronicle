@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright Woogle. All Rights Reserved.
 
 #pragma once
 
@@ -32,10 +32,10 @@ class TRIBLADECHRONICLE_API UTcInputConfig : public UDataAsset
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, Category = "Tc|Pawn")
+	UFUNCTION(BlueprintCallable, Category = "TC|Pawn")
 	const UInputAction* FindNativeInputActionForTag(const FGameplayTag& InputTag, bool bLogNotFound = true) const;
 
-	UFUNCTION(BlueprintCallable, Category = "Tc|Pawn")
+	UFUNCTION(BlueprintCallable, Category = "TC|Pawn")
 	const UInputAction* FindAbilityInputActionForTag(const FGameplayTag& InputTag, bool bLogNotFound = true) const;
 
 public:

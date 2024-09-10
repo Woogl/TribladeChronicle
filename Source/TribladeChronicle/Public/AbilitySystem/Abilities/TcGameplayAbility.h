@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright Woogle. All Rights Reserved.
 
 #pragma once
 
@@ -31,7 +31,7 @@ class TRIBLADECHRONICLE_API UTcGameplayAbility : public UGameplayAbility
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, Category = "Tc|Ability")
+	UFUNCTION(BlueprintCallable, Category = "TC|Ability")
 	AController* GetControllerFromActorInfo() const;
 
 	ETcAbilityActivationPolicy GetActivationPolicy() const { return ActivationPolicy; }
@@ -44,6 +44,6 @@ protected:
 	//~End UGameplayAbility interface
 	
 	// Defines how this ability is meant to activate.
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Tc|Ability Activation")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "TC|Ability Activation")
 	ETcAbilityActivationPolicy ActivationPolicy;
 };
