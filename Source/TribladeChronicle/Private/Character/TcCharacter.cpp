@@ -73,6 +73,14 @@ UAbilitySystemComponent* ATcCharacter::GetAbilitySystemComponent() const
 	return nullptr;
 }
 
+void ATcCharacter::GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const
+{
+	if (AbilitySystemComponent.IsValid())
+	{
+		AbilitySystemComponent->GetOwnedGameplayTags(TagContainer);
+	}
+}
+
 void ATcCharacter::ToggleCrouch()
 {
 	if (bIsCrouched || GetCharacterMovement()->bWantsToCrouch)

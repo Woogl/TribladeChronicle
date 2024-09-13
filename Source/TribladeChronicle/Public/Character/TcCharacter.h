@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
+#include "GameplayTagAssetInterface.h"
 #include "GameFramework/Character.h"
 #include "TcCharacter.generated.h"
 
@@ -16,7 +17,7 @@ class UAbilitySystemComponent;
 class UTcHealthComponent;
 
 UCLASS(Abstract)
-class TRIBLADECHRONICLE_API ATcCharacter : public ACharacter,  public IAbilitySystemInterface
+class TRIBLADECHRONICLE_API ATcCharacter : public ACharacter,  public IAbilitySystemInterface, public IGameplayTagAssetInterface
 {
 	GENERATED_BODY()
 
@@ -44,6 +45,9 @@ public:
 	UTcAbilitySystemComponent* GetTcAbilitySystemComponent() const;
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
+	// IGameplayTagAssetInterface
+	virtual void GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const override;
+	
 	void ToggleCrouch();
 
 protected:
