@@ -31,7 +31,7 @@ I am developing an action RPG game using Unreal Engine 5.4
 
 >💾 2024.09.11
 
-### 5. Hit Reaction
+### 5. Hit React Abiliy
 ![TribladeChroniclePreviewNetMode_Client164-bit_PCD3DSM62024-09-1400-29-00-ezgif com-optimize](https://github.com/user-attachments/assets/e2c3e7f6-ac96-435b-9b87-86d7f60bb67d)
 
 - Turn to the instigator when attacked
