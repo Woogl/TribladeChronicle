@@ -33,10 +33,21 @@ I am developing an action RPG game using Unreal Engine 5.4
 
 >💾 2024.09.11
 
-### 5. Hit React Ability
+### 5. Attack & Hit React Ability
 ![TribladeChroniclePreviewNetMode_Client164-bit_PCD3DSM62024-09-1400-29-00-ezgif com-optimize](https://github.com/user-attachments/assets/e2c3e7f6-ac96-435b-9b87-86d7f60bb67d)
 
 - Take damage and turn to the instigator when attacked.
 - This ability needs `NetExecutionPolicy::ServerInitiated`
 
 >💾 2024.09.14
+
+### 6. Targeting System
+![TargetingSystem-ezgif com-optimize](https://github.com/user-attachments/assets/e54767b0-f323-4268-aca8-947eb4dfc509)
+
+- I implemented it by combining two plugins.
+  - Gameplay targeting system
+    - https://dev.epicgames.com/documentation/unreal-engine/gameplay-targeting-system-in-unreal-engine
+  - Target system plugin
+    - https://github.com/mklabs/ue4-targetsystemplugin
+   
+>💾 2024.09.16
