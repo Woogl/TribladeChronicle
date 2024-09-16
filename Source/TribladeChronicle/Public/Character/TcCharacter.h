@@ -16,7 +16,7 @@ class UTcAbilitySystemComponent;
 class UAbilitySystemComponent;
 class UTcHealthComponent;
 
-UCLASS(Abstract)
+UCLASS()
 class TRIBLADECHRONICLE_API ATcCharacter : public ACharacter,  public IAbilitySystemInterface, public IGameplayTagAssetInterface
 {
 	GENERATED_BODY()
