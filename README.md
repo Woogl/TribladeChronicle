@@ -45,9 +45,9 @@ I am developing an action RPG game using Unreal Engine 5.4
 ![TargetingSystem-ezgif com-optimize](https://github.com/user-attachments/assets/e54767b0-f323-4268-aca8-947eb4dfc509)
 
 - I implemented it by combining two plugins.
-  - Gameplay targeting system
+  - **Gameplay targeting system**
     - https://dev.epicgames.com/documentation/unreal-engine/gameplay-targeting-system-in-unreal-engine
-  - Target system plugin
+  - **Target system plugin**
     - https://github.com/mklabs/ue4-targetsystemplugin
    
 >💾 2024.09.16
