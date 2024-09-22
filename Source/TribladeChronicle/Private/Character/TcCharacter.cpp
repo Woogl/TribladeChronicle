@@ -96,7 +96,11 @@ void ATcCharacter::ToggleCrouch()
 void ATcCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	if (!IsPlayerControlled())
+	{
+		
+	}
 }
 
 void ATcCharacter::InitAbilitySystem()
