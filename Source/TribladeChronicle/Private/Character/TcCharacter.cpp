@@ -66,18 +66,18 @@ UTcAbilitySystemComponent* ATcCharacter::GetTcAbilitySystemComponent() const
 
 UAbilitySystemComponent* ATcCharacter::GetAbilitySystemComponent() const
 {
-	if (AbilitySystemComponent.IsValid())
+	if (IsPlayerControlled())
 	{
-		return AbilitySystemComponent.Get();
+		return GetTcPlayerState()->GetAbilitySystemComponent();
 	}
-	return nullptr;
+	return AbilitySystemComponent;
 }
 
 void ATcCharacter::GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const
 {
-	if (AbilitySystemComponent.IsValid())
+	if (GetAbilitySystemComponent())
 	{
-		AbilitySystemComponent->GetOwnedGameplayTags(TagContainer);
+		GetAbilitySystemComponent()->GetOwnedGameplayTags(TagContainer);
 	}
 }
 
@@ -91,25 +91,6 @@ void ATcCharacter::ToggleCrouch()
 	{
 		Crouch();
 	}
-}
-
-void ATcCharacter::BeginPlay()
-{
-	Super::BeginPlay();
-
-	if (!IsPlayerControlled())
-	{
-		
-	}
-}
-
-void ATcCharacter::InitAbilitySystem()
-{
-	ATcPlayerState* TcPlayerState = GetPlayerState<ATcPlayerState>();
-	check(TcPlayerState);
-	TcPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(TcPlayerState, this);
-	AbilitySystemComponent = TcPlayerState->GetTcAbilitySystemComponent();
-	HealthComponent->InitializeWithAbilitySystem(AbilitySystemComponent.Get());
 }
 
 void ATcCharacter::OnDeathStarted(AActor* OwningActor)

@@ -13,5 +13,11 @@ UCLASS()
 class TRIBLADECHRONICLE_API ATcEnemyCharacter : public ATcCharacter
 {
 	GENERATED_BODY()
-	
+
+public:
+	ATcEnemyCharacter();
+
+protected:
+	virtual void BeginPlay() override;
+	virtual void InitializeAbilitySystem() override;
 };

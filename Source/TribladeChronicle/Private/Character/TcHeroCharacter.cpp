@@ -8,8 +8,10 @@
 #include "AbilitySystem/TcAbilitySet.h"
 #include "AbilitySystem/TcAbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Character/TcHealthComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Input/TcInputComponent.h"
+#include "Player/TcPlayerState.h"
 
 ATcHeroCharacter::ATcHeroCharacter()
 {
@@ -28,7 +30,7 @@ void ATcHeroCharacter::PossessedBy(AController* NewController)
 	Super::PossessedBy(NewController);
 
 	// Init ability actor info for the Server
-	InitAbilitySystem();
+	InitializeAbilitySystem();
 	
 	if (AbilitySet)
 	{
@@ -41,7 +43,7 @@ void ATcHeroCharacter::OnRep_PlayerState()
 	Super::OnRep_PlayerState();
 
 	// Init ability actor info for the Client
-	InitAbilitySystem();
+	InitializeAbilitySystem();
 }
 
 void ATcHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -63,6 +65,15 @@ void ATcHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		TcInputComp->BindNativeAction(InputConfig, TcGameplayTags::INPUT_MOVE, ETriggerEvent::Triggered, this, &ThisClass::Input_Move, false);
 		TcInputComp->BindNativeAction(InputConfig, TcGameplayTags::INPUT_LOOK, ETriggerEvent::Triggered, this, &ThisClass::Input_Look, false);
 	}
+}
+
+void ATcHeroCharacter::InitializeAbilitySystem()
+{
+	ATcPlayerState* TcPlayerState = GetPlayerState<ATcPlayerState>();
+	check(TcPlayerState);
+	TcPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(TcPlayerState, this);
+	AbilitySystemComponent = TcPlayerState->GetTcAbilitySystemComponent();
+	HealthComponent->InitializeWithAbilitySystem(AbilitySystemComponent);
 }
 
 void ATcHeroCharacter::Input_Move(const FInputActionValue& Value)

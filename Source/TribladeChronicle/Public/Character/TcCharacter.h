@@ -23,7 +23,7 @@ class TRIBLADECHRONICLE_API ATcCharacter : public ACharacter,  public IAbilitySy
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Ability", meta = (AllowPrivateAccess = "true"))
-	TWeakObjectPtr<UTcAbilitySystemComponent> AbilitySystemComponent;
+	TObjectPtr<UTcAbilitySystemComponent> AbilitySystemComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "TC|Character", Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UTcHealthComponent> HealthComponent;
@@ -51,8 +51,7 @@ public:
 	void ToggleCrouch();
 
 protected:
-	virtual void BeginPlay() override;
-	void InitAbilitySystem();
+	virtual void InitializeAbilitySystem() {};
 
 	// Begins the death sequence for the character (disables collision, disables movement, etc...)
 	UFUNCTION()
