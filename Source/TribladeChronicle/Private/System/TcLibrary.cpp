@@ -42,19 +42,3 @@ AActor* UTcLibrary::GetClosestActorInSphere(AActor* Source, float Offset, float 
 	}
 	return ClosestActor;
 }
-
-AActor* UTcLibrary::GetAttachedActorByClass(AActor* Target, TSubclassOf<AActor> SearchClass, bool bRecursivelyIncludeAttachedActors)
-{
-	TArray<AActor*> OutActors;
-	Target->GetAttachedActors(OutActors, true, bRecursivelyIncludeAttachedActors);
-
-	for (AActor* Actor : OutActors)
-	{
-		if (Actor->IsA(SearchClass))
-		{
-			return Actor;
-		}
-	}
-	
-	return nullptr;
-}

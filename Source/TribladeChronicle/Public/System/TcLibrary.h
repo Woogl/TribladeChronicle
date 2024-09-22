@@ -21,8 +21,4 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "TC|Targeting")
 	static AActor* GetClosestActorInSphere(AActor* Source, float Offset, float Radius, const TArray<TEnumAsByte<EObjectTypeQuery>>& ObjectTypes);
-
-	/** Searches attached actor array and returns first encountered actor of the specified class */
-	UFUNCTION(BlueprintCallable, meta = (DefaultToSelf = "Target"), Category = "TC|Utility")
-	static AActor* GetAttachedActorByClass(AActor* Target, TSubclassOf<AActor> SearchClass, bool bRecursivelyIncludeAttachedActors);
 };
