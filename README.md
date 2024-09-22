@@ -55,4 +55,6 @@ I am developing an action RPG game using Unreal Engine 5.4
 ### 7. Combo Attack
 ![ComboAttack-ezgif com-optimize](https://github.com/user-attachments/assets/3a2f64ae-1172-40d4-b158-7a40fb5e4170)
 
-- Combo window(anim notify state) that retriggers next combo attack.
+- Combo Window(Anim notify state) defines the duration for retriggering the next combo.
+
+>💾 2024.09.22
