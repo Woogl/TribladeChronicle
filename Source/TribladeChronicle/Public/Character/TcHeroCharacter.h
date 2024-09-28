@@ -36,13 +36,9 @@ protected:
 
 public:
 	ATcHeroCharacter();
-	virtual void PossessedBy(AController* NewController) override;
-	virtual void OnRep_PlayerState() override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 protected:
-	virtual void InitializeAbilitySystem() override;
-	
 	void Input_Move(const FInputActionValue& Value);
 	void Input_Look(const FInputActionValue& Value);
 	void Input_AbilityInputPressed(FGameplayTag InputTag);

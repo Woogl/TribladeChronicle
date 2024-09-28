@@ -6,6 +6,7 @@
 #include "TcLogs.h"
 #include "AbilitySystem/TcAbilitySystemComponent.h"
 #include "Character/TcHealthComponent.h"
+#include "Character/TcPawnExtensionComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Player/TcPlayerController.h"
@@ -37,6 +38,10 @@ ATcCharacter::ATcCharacter()
 	GetCharacterMovement()->bCanWalkOffLedgesWhenCrouching = true;
 	GetCharacterMovement()->SetCrouchedHalfHeight(65.0f);
 
+	PawnExtComponent = CreateDefaultSubobject<UTcPawnExtensionComponent>(TEXT("PawnExtensionComponent"));
+	PawnExtComponent->OnAbilitySystemInitialized_RegisterAndCall(FSimpleMulticastDelegate::FDelegate::CreateUObject(this, &ThisClass::OnAbilitySystemInitialized));
+	PawnExtComponent->OnAbilitySystemUninitialized_Register(FSimpleMulticastDelegate::FDelegate::CreateUObject(this, &ThisClass::OnAbilitySystemUninitialized));
+
 	HealthComponent = CreateDefaultSubobject<UTcHealthComponent>(TEXT("HealthComponent"));
 	HealthComponent->OnDeathStarted.AddDynamic(this, &ThisClass::OnDeathStarted);
 	HealthComponent->OnDeathFinished.AddDynamic(this, &ThisClass::OnDeathFinished);
@@ -66,11 +71,12 @@ UTcAbilitySystemComponent* ATcCharacter::GetTcAbilitySystemComponent() const
 
 UAbilitySystemComponent* ATcCharacter::GetAbilitySystemComponent() const
 {
-	if (IsPlayerControlled())
+	if (PawnExtComponent == nullptr)
 	{
-		return GetTcPlayerState()->GetAbilitySystemComponent();
+		return nullptr;
 	}
-	return AbilitySystemComponent;
+
+	return PawnExtComponent->GetTcAbilitySystemComponent();
 }
 
 void ATcCharacter::GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const
@@ -91,6 +97,37 @@ void ATcCharacter::ToggleCrouch()
 	{
 		Crouch();
 	}
+}
+
+void ATcCharacter::OnAbilitySystemInitialized()
+{
+	UTcAbilitySystemComponent* TcASC = GetTcAbilitySystemComponent();
+	check(TcASC);
+
+	HealthComponent->InitializeWithAbilitySystem(TcASC);
+}
+
+void ATcCharacter::OnAbilitySystemUninitialized()
+{
+	HealthComponent->UninitializeFromAbilitySystem();
+}
+
+void ATcCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	// Init ability actor info for the Server
+	PawnExtComponent->InitializeAbilitySystem(GetTcAbilitySystemComponent(), this);
+	GetPlayerState<ATcPlayerState>()->SetPawnData(PawnData);
+}
+
+void ATcCharacter::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+
+	// Init ability actor info for the Client
+	PawnExtComponent->InitializeAbilitySystem(GetTcAbilitySystemComponent(), this);
+	GetPlayerState<ATcPlayerState>()->SetPawnData(PawnData);
 }
 
 void ATcCharacter::OnDeathStarted(AActor* OwningActor)

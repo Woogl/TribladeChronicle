@@ -15,7 +15,7 @@ UTcAbilitySystemComponent::UTcAbilitySystemComponent()
 void UTcAbilitySystemComponent::InitAbilityActorInfo(AActor* InOwnerActor, AActor* InAvatarActor)
 {
 	Super::InitAbilityActorInfo(InOwnerActor, InAvatarActor);
-	
+
 	TryActivateAbilitiesOnSpawn();
 }
 

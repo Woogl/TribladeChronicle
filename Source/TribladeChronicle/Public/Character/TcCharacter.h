@@ -8,6 +8,8 @@
 #include "GameFramework/Character.h"
 #include "TcCharacter.generated.h"
 
+class UTcPawnExtensionComponent;
+class UTcPawnData;
 class ATcPlayerController;
 class ATcPlayerState;
 class UAttributeSet;
@@ -22,14 +24,14 @@ class TRIBLADECHRONICLE_API ATcCharacter : public ACharacter,  public IAbilitySy
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Ability", meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UTcAbilitySystemComponent> AbilitySystemComponent;
-
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "TC|Character", Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UTcPawnExtensionComponent> PawnExtComponent;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "TC|Character", Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UTcHealthComponent> HealthComponent;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn Data")
-	TObjectPtr<UTcAbilitySet> AbilitySet;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "TC|Pawn Data")
+	TObjectPtr<UTcPawnData> PawnData;
 
 public:
 	ATcCharacter();
@@ -51,7 +53,11 @@ public:
 	void ToggleCrouch();
 
 protected:
-	virtual void InitializeAbilitySystem() {};
+	virtual void OnAbilitySystemInitialized();
+	virtual void OnAbilitySystemUninitialized();
+	
+	virtual void PossessedBy(AController* NewController) override;
+	virtual void OnRep_PlayerState() override;
 
 	// Begins the death sequence for the character (disables collision, disables movement, etc...)
 	UFUNCTION()
@@ -62,4 +68,7 @@ protected:
 	virtual void OnDeathFinished(AActor* OwningActor);
 
 	void DisableMovementAndCollision();
+
+private:
+
 };

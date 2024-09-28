@@ -8,10 +8,8 @@
 #include "AbilitySystem/TcAbilitySet.h"
 #include "AbilitySystem/TcAbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
-#include "Character/TcHealthComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Input/TcInputComponent.h"
-#include "Player/TcPlayerState.h"
 
 ATcHeroCharacter::ATcHeroCharacter()
 {
@@ -23,27 +21,6 @@ ATcHeroCharacter::ATcHeroCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
-}
-
-void ATcHeroCharacter::PossessedBy(AController* NewController)
-{
-	Super::PossessedBy(NewController);
-
-	// Init ability actor info for the Server
-	InitializeAbilitySystem();
-	
-	if (AbilitySet)
-	{
-		AbilitySet->GiveToAbilitySystem(GetAbilitySystemComponent(), this);
-	}
-}
-
-void ATcHeroCharacter::OnRep_PlayerState()
-{
-	Super::OnRep_PlayerState();
-
-	// Init ability actor info for the Client
-	InitializeAbilitySystem();
 }
 
 void ATcHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -65,15 +42,6 @@ void ATcHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		TcInputComp->BindNativeAction(InputConfig, TcGameplayTags::INPUT_MOVE, ETriggerEvent::Triggered, this, &ThisClass::Input_Move, false);
 		TcInputComp->BindNativeAction(InputConfig, TcGameplayTags::INPUT_LOOK, ETriggerEvent::Triggered, this, &ThisClass::Input_Look, false);
 	}
-}
-
-void ATcHeroCharacter::InitializeAbilitySystem()
-{
-	ATcPlayerState* TcPlayerState = GetPlayerState<ATcPlayerState>();
-	check(TcPlayerState);
-	TcPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(TcPlayerState, this);
-	AbilitySystemComponent = TcPlayerState->GetTcAbilitySystemComponent();
-	HealthComponent->InitializeWithAbilitySystem(AbilitySystemComponent);
 }
 
 void ATcHeroCharacter::Input_Move(const FInputActionValue& Value)

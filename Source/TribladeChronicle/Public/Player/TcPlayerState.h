@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
+#include "Character/TcPawnData.h"
 #include "GameFramework/PlayerState.h"
 #include "TcPlayerState.generated.h"
 
@@ -26,8 +27,20 @@ public:
 	UTcAbilitySystemComponent* GetTcAbilitySystemComponent() const { return AbilitySystemComponent; }
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
+	const UTcPawnData* GetPawnData() const { return PawnData; }
+	void SetPawnData(const UTcPawnData* InPawnData);
+
+	virtual void PostInitializeComponents() override;
+
 	//UAttributeSet* GetAttributeSet() const { return AttributeSet; }
-	TObjectPtr<const UTcHealthSet> GetHealthSet() const { return HealthSet; }
+	// TObjectPtr<const UTcHealthSet> GetHealthSet() const { return HealthSet; }
+
+protected:
+	UFUNCTION()
+	void OnRep_PawnData();
+	
+	UPROPERTY(ReplicatedUsing = OnRep_PawnData)
+	TObjectPtr<const UTcPawnData> PawnData;
 	
 private:
 	UPROPERTY(VisibleAnywhere)

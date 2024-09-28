@@ -15,5 +15,5 @@ class TRIBLADECHRONICLE_API ATcGameMode : public AGameModeBase
 	GENERATED_BODY()
 
 public:
-
+	ATcGameMode();
 };

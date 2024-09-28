@@ -16,8 +16,7 @@ class TRIBLADECHRONICLE_API ATcEnemyCharacter : public ATcCharacter
 
 public:
 	ATcEnemyCharacter();
-
+	
 protected:
-	virtual void BeginPlay() override;
-	virtual void InitializeAbilitySystem() override;
+
 };

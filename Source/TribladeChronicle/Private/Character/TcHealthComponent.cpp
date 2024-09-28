@@ -30,21 +30,21 @@ void UTcHealthComponent::InitializeWithAbilitySystem(UTcAbilitySystemComponent* 
 
 	if (AbilitySystemComponent.IsValid())
 	{
-		UE_LOG(LogTc, Error, TEXT("LyraHealthComponent: Health component for owner [%s] has already been initialized with an ability system."), *GetNameSafe(Owner));
+		UE_LOG(LogTc, Error, TEXT("TcHealthComponent: Health component for owner [%s] has already been initialized with an ability system."), *GetNameSafe(Owner));
 		return;
 	}
 
 	AbilitySystemComponent = InASC;
 	if (!AbilitySystemComponent.IsValid())
 	{
-		UE_LOG(LogTc, Error, TEXT("LyraHealthComponent: Cannot initialize health component for owner [%s] with NULL ability system."), *GetNameSafe(Owner));
+		UE_LOG(LogTc, Error, TEXT("TcHealthComponent: Cannot initialize health component for owner [%s] with NULL ability system."), *GetNameSafe(Owner));
 		return;
 	}
 
 	HealthSet = AbilitySystemComponent->GetSet<UTcHealthSet>();
 	if (!HealthSet)
 	{
-		UE_LOG(LogTc, Error, TEXT("LyraHealthComponent: Cannot initialize health component for owner [%s] with NULL health set on the ability system."), *GetNameSafe(Owner));
+		UE_LOG(LogTc, Error, TEXT("TcHealthComponent: Cannot initialize health component for owner [%s] with NULL health set on the ability system."), *GetNameSafe(Owner));
 		return;
 	}
 
