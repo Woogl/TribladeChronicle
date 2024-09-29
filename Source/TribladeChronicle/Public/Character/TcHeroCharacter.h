@@ -28,11 +28,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UCameraComponent> FollowCamera;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn Data")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "TC|Pawn Data")
 	TObjectPtr<UInputMappingContext> DefaultMappingContext;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn Data")
-	TObjectPtr<UTcInputConfig> InputConfig;
 
 public:
 	ATcHeroCharacter();

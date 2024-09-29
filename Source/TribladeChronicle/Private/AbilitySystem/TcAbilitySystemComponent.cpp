@@ -16,8 +16,8 @@ void UTcAbilitySystemComponent::InitAbilityActorInfo(AActor* InOwnerActor, AActo
 {
 	Super::InitAbilityActorInfo(InOwnerActor, InAvatarActor);
 
-	//const bool bHasNewPawnAvatar = Cast<APawn>(InAvatarActor) && (InAvatarActor != AbilityActorInfo.Get()->AvatarActor);
-	//if (bHasNewPawnAvatar)
+	const bool bHasNewPawnAvatar = Cast<APawn>(InAvatarActor) && (InAvatarActor != AbilityActorInfo.Get()->AvatarActor);
+	if (bHasNewPawnAvatar)
 	{
 		TryActivateAbilitiesOnSpawn();
 	}

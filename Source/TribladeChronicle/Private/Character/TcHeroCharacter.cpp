@@ -8,6 +8,7 @@
 #include "AbilitySystem/TcAbilitySet.h"
 #include "AbilitySystem/TcAbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Character/TcPawnData.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Input/TcInputComponent.h"
 
@@ -37,10 +38,10 @@ void ATcHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	if (UTcInputComponent* TcInputComp = Cast<UTcInputComponent>(PlayerInputComponent))
 	{
-		TcInputComp->BindAbilityActions(InputConfig, this, &ThisClass::Input_AbilityInputPressed, &ThisClass::Input_AbilityInputReleased);
+		TcInputComp->BindAbilityActions(PawnData->InputConfig, this, &ThisClass::Input_AbilityInputPressed, &ThisClass::Input_AbilityInputReleased);
 		
-		TcInputComp->BindNativeAction(InputConfig, TcGameplayTags::INPUT_MOVE, ETriggerEvent::Triggered, this, &ThisClass::Input_Move, false);
-		TcInputComp->BindNativeAction(InputConfig, TcGameplayTags::INPUT_LOOK, ETriggerEvent::Triggered, this, &ThisClass::Input_Look, false);
+		TcInputComp->BindNativeAction(PawnData->InputConfig, TcGameplayTags::INPUT_MOVE, ETriggerEvent::Triggered, this, &ThisClass::Input_Move, false);
+		TcInputComp->BindNativeAction(PawnData->InputConfig, TcGameplayTags::INPUT_LOOK, ETriggerEvent::Triggered, this, &ThisClass::Input_Look, false);
 	}
 }
 
