@@ -58,3 +58,10 @@ I am developing an action RPG game using Unreal Engine 5.4
 - Combo Window(Anim notify state) defines the duration for retriggering the next combo.
 
 >💾 2024.09.22
+
+### 8. Enemy Behaviour Tree
+<img src="https://github.com/user-attachments/assets/cc253ce0-745f-4b6f-99dd-992f261f633e" height="300" />
+
+- Enemy chase & attack
+
+>💾 2024.09.29
