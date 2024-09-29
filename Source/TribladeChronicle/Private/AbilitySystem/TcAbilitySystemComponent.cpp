@@ -16,7 +16,11 @@ void UTcAbilitySystemComponent::InitAbilityActorInfo(AActor* InOwnerActor, AActo
 {
 	Super::InitAbilityActorInfo(InOwnerActor, InAvatarActor);
 
-	TryActivateAbilitiesOnSpawn();
+	//const bool bHasNewPawnAvatar = Cast<APawn>(InAvatarActor) && (InAvatarActor != AbilityActorInfo.Get()->AvatarActor);
+	//if (bHasNewPawnAvatar)
+	{
+		TryActivateAbilitiesOnSpawn();
+	}
 }
 
 void UTcAbilitySystemComponent::AbilityInputTagPressed(const FGameplayTag& InputTag)
