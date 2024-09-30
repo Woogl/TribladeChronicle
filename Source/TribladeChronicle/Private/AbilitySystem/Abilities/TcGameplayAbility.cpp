@@ -3,7 +3,16 @@
 
 #include "AbilitySystem/Abilities/TcGameplayAbility.h"
 
-#include "AbilitySystemComponent.h"
+#include "AbilitySystem/TcAbilitySystemComponent.h"
+
+UTcAbilitySystemComponent* UTcGameplayAbility::GetTcAbilitySystemComponentFromActorInfo() const
+{
+	if (CurrentActorInfo)
+	{
+		return Cast<UTcAbilitySystemComponent>(CurrentActorInfo->AbilitySystemComponent.Get());
+	}
+	return nullptr;
+}
 
 AController* UTcGameplayAbility::GetControllerFromActorInfo() const
 {
@@ -65,6 +74,6 @@ void UTcGameplayAbility::TryActivateAbilityOnSpawn(const FGameplayAbilityActorIn
 void UTcGameplayAbility::OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)
 {
 	Super::OnGiveAbility(ActorInfo, Spec);
-
+	
 	TryActivateAbilityOnSpawn(ActorInfo, Spec);
 }

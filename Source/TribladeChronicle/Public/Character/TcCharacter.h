@@ -52,11 +52,16 @@ public:
 	
 	void ToggleCrouch();
 
+	const UTcPawnData* GetPawnData() const { return PawnData; }
+
 protected:
 	virtual void OnAbilitySystemInitialized();
 	virtual void OnAbilitySystemUninitialized();
 	
 	virtual void PossessedBy(AController* NewController) override;
+	virtual void UnPossessed() override;
+
+	virtual void OnRep_Controller() override;
 	virtual void OnRep_PlayerState() override;
 
 	// Begins the death sequence for the character (disables collision, disables movement, etc...)

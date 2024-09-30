@@ -14,7 +14,6 @@
 
 ATcCharacter::ATcCharacter()
 {
-	// Avoid ticking characters if possible.
 	PrimaryActorTick.bCanEverTick = false;
 	PrimaryActorTick.bStartWithTickEnabled = false;
 
@@ -116,9 +115,25 @@ void ATcCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 
+	PawnExtComponent->HandleControllerChanged();
+	
 	// Init ability actor info for the Server
-	PawnExtComponent->InitializeAbilitySystem(GetTcAbilitySystemComponent(), this);
-	GetPlayerState<ATcPlayerState>()->SetPawnData(PawnData);
+	PawnExtComponent->SetPawnData(PawnData);
+	PawnExtComponent->InitializeAbilitySystem(GetTcAbilitySystemComponent(), GetTcPlayerState());
+}
+
+void ATcCharacter::UnPossessed()
+{
+	Super::UnPossessed();
+
+	PawnExtComponent->HandleControllerChanged();
+}
+
+void ATcCharacter::OnRep_Controller()
+{
+	Super::OnRep_Controller();
+
+	PawnExtComponent->HandleControllerChanged();
 }
 
 void ATcCharacter::OnRep_PlayerState()
@@ -126,8 +141,8 @@ void ATcCharacter::OnRep_PlayerState()
 	Super::OnRep_PlayerState();
 
 	// Init ability actor info for the Client
-	PawnExtComponent->InitializeAbilitySystem(GetTcAbilitySystemComponent(), this);
-	GetPlayerState<ATcPlayerState>()->SetPawnData(PawnData);
+	PawnExtComponent->SetPawnData(PawnData);
+	PawnExtComponent->InitializeAbilitySystem(GetTcAbilitySystemComponent(), GetTcPlayerState());
 }
 
 void ATcCharacter::OnDeathStarted(AActor* OwningActor)

@@ -6,6 +6,8 @@
 #include "Abilities/GameplayAbility.h"
 #include "TcGameplayAbility.generated.h"
 
+class UTcAbilitySystemComponent;
+
 /**
  *	Defines how an ability is meant to activate.
  */
@@ -31,6 +33,9 @@ class TRIBLADECHRONICLE_API UTcGameplayAbility : public UGameplayAbility
 	GENERATED_BODY()
 
 public:
+	UFUNCTION(BlueprintCallable, Category = "TC|Ability")
+	UTcAbilitySystemComponent* GetTcAbilitySystemComponentFromActorInfo() const;
+	
 	UFUNCTION(BlueprintCallable, Category = "TC|Ability")
 	AController* GetControllerFromActorInfo() const;
 

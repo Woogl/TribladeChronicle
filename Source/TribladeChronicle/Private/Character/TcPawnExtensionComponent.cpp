@@ -16,9 +16,6 @@ UTcPawnExtensionComponent::UTcPawnExtensionComponent(const FObjectInitializer& O
 	PrimaryComponentTick.bCanEverTick = false;
 
 	SetIsReplicatedByDefault(true);
-
-	//PawnData = nullptr;
-	AbilitySystemComponent = nullptr;
 }
 
 void UTcPawnExtensionComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -98,6 +95,14 @@ void UTcPawnExtensionComponent::InitializeAbilitySystem(UTcAbilitySystemComponen
 	AbilitySystemComponent = InASC;
 	AbilitySystemComponent->InitAbilityActorInfo(InOwnerActor, Pawn);
 
+	if (Pawn->Controller)
+	{
+		if (ATcPlayerState* TcPS = GetPlayerState<ATcPlayerState>())
+		{
+			TcPS->SetPawnData(PawnData);
+		}
+	}
+
 	OnAbilitySystemInitialized.Broadcast();
 }
 
@@ -131,6 +136,22 @@ void UTcPawnExtensionComponent::UninitializeAbilitySystem()
 	}
 
 	AbilitySystemComponent = nullptr;
+}
+
+void UTcPawnExtensionComponent::HandleControllerChanged()
+{
+	if (AbilitySystemComponent && (AbilitySystemComponent->GetAvatarActor() == GetPawnChecked<APawn>()))
+	{
+		ensure(AbilitySystemComponent->AbilityActorInfo->OwnerActor == AbilitySystemComponent->GetOwnerActor());
+		if (AbilitySystemComponent->GetOwnerActor() == nullptr)
+		{
+			UninitializeAbilitySystem();
+		}
+		else
+		{
+			AbilitySystemComponent->RefreshAbilityActorInfo();
+		}
+	}
 }
 
 void UTcPawnExtensionComponent::OnAbilitySystemInitialized_RegisterAndCall(FSimpleMulticastDelegate::FDelegate Delegate)

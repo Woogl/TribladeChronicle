@@ -36,6 +36,9 @@ public:
 	/** Should be called by the owning pawn to remove itself as the avatar of the ability system. */
 	void UninitializeAbilitySystem();
 
+	/** Should be called by the owning pawn when the pawn's controller changes. */
+	void HandleControllerChanged();
+	
 	/** Register with the OnAbilitySystemInitialized delegate and broadcast if our pawn has been registered with the ability system component */
 	void OnAbilitySystemInitialized_RegisterAndCall(FSimpleMulticastDelegate::FDelegate Delegate);
 
