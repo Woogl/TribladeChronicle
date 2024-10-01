@@ -67,6 +67,6 @@ I am developing an action RPG game using Unreal Engine 5.4
 >💾 2024.09.29
 
 ### 9. Stun Ability
-![Stun](https://github.com/user-attachments/assets/81304c10-5eb5-413e-a1fb-abe5501b1869)
+![TribladeChroniclePreviewNetMode_Client164-bit_PCD3DSM62024-10-0118-40-42-ezgif com-optimize](https://github.com/user-attachments/assets/b0f0d9ec-39f9-4d6c-962c-e7a854aaa2c1)
 
 >💾 2024.10.01
