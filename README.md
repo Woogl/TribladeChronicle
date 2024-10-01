@@ -65,3 +65,8 @@ I am developing an action RPG game using Unreal Engine 5.4
 - Enemy chase & attack
 
 >💾 2024.09.29
+
+### 9. Stun Ability
+![Stun](https://github.com/user-attachments/assets/81304c10-5eb5-413e-a1fb-abe5501b1869)
+
+>💾 2024.10.01
