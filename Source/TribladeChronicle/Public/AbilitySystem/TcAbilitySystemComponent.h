@@ -6,7 +6,6 @@
 #include "AbilitySystemComponent.h"
 #include "TcAbilitySystemComponent.generated.h"
 
-class UTcGameplayAbility;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAbilityInputTriggerEvent, FGameplayTag, InputTag);
 
 /**
@@ -19,12 +18,6 @@ class TRIBLADECHRONICLE_API UTcAbilitySystemComponent : public UAbilitySystemCom
 
 public:
 	UTcAbilitySystemComponent();
-
-	UPROPERTY(BlueprintAssignable, Category = "TC|Input")
-	FOnAbilityInputTriggerEvent OnAbilityInputPressed;
-
-	UPROPERTY(BlueprintAssignable, Category = "TC|Input")
-	FOnAbilityInputTriggerEvent OnAbilityInputReleased;
 	
 	virtual void InitAbilityActorInfo(AActor* InOwnerActor, AActor* InAvatarActor) override;
 
@@ -33,9 +26,6 @@ public:
 
 	void ProcessAbilityInput(float DeltaTime, bool bGamePaused);
 	void ClearAbilityInput();
-
-	UPROPERTY(BlueprintReadWrite)
-	TMap<UTcGameplayAbility*, int32> ComboAbilityIndexes;
 
 protected:
 	void TryActivateAbilitiesOnSpawn();

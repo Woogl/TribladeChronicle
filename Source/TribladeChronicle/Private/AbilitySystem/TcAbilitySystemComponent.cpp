@@ -34,8 +34,6 @@ void UTcAbilitySystemComponent::AbilityInputTagPressed(const FGameplayTag& Input
 			{
 				InputPressedSpecHandles.AddUnique(AbilitySpec.Handle);
 				InputHeldSpecHandles.AddUnique(AbilitySpec.Handle);
-				
-				OnAbilityInputPressed.Broadcast(InputTag);
 			}
 		}
 	}
@@ -51,8 +49,6 @@ void UTcAbilitySystemComponent::AbilityInputTagReleased(const FGameplayTag& Inpu
 			{
 				InputReleasedSpecHandles.AddUnique(AbilitySpec.Handle);
 				InputHeldSpecHandles.Remove(AbilitySpec.Handle);
-
-				OnAbilityInputReleased.Broadcast(InputTag);
 			}
 		}
 	}
