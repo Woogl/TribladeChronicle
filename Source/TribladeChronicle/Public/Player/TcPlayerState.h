@@ -32,9 +32,6 @@ public:
 
 	virtual void PostInitializeComponents() override;
 
-	//UAttributeSet* GetAttributeSet() const { return AttributeSet; }
-	// TObjectPtr<const UTcHealthSet> GetHealthSet() const { return HealthSet; }
-
 protected:
 	UFUNCTION()
 	void OnRep_PawnData();

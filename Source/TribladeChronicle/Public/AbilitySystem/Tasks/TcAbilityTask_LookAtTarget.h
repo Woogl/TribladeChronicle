@@ -22,8 +22,8 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnLookAtTargetFinished OnFinished;
 
-	UFUNCTION(BlueprintCallable, Category="Ability|Tasks", meta=(HidePin = "OwningAbility", DefaultToSelf = "OwningAbility", BlueprintInternalUseOnly = "TRUE"))
-	static UTcAbilityTask_LookAtTarget* LookAtTarget(UGameplayAbility* OwningAbility, AActor* TargetActor, float Duration = 0.2f, bool EaseIn, bool EaseOut);
+	UFUNCTION(BlueprintCallable, Category="Ability|Tasks", meta=(HidePin = "OwningAbility", DefaultToSelf = "OwningAbility", Duration = "0.2", BlueprintInternalUseOnly = "TRUE"))
+	static UTcAbilityTask_LookAtTarget* LookAtTarget(UGameplayAbility* OwningAbility, AActor* TargetActor, float Duration, bool EaseIn, bool EaseOut);
 
 protected:
 	virtual void Activate() override;
