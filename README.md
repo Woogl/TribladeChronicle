@@ -70,3 +70,10 @@ I am developing an action RPG game using Unreal Engine 5.4
 ![TribladeChroniclePreviewNetMode_Client164-bit_PCD3DSM62024-10-0118-40-42-ezgif com-optimize](https://github.com/user-attachments/assets/b0f0d9ec-39f9-4d6c-962c-e7a854aaa2c1)
 
 >💾 2024.10.01
+
+### 10. Prevent Friendly Fire
+![image](https://github.com/user-attachments/assets/39662410-8f0b-424f-9600-205f9a915c59)
+
+- Data-driven setting with Gameplay Targeting System. 
+
+>💾 2024.10.03
