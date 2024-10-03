@@ -72,7 +72,7 @@ I am developing an action RPG game using Unreal Engine 5.4
 >💾 2024.10.01
 
 ### 10. Prevent Friendly Fire
-![image](https://github.com/user-attachments/assets/39662410-8f0b-424f-9600-205f9a915c59)
+![image](https://github.com/user-attachments/assets/23e624f6-48b8-4d34-bd32-ba71cb258f4b)
 
 - Data-driven setting with Gameplay Targeting System. 
 
