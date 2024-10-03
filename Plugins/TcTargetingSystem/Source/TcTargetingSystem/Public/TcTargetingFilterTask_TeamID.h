@@ -20,15 +20,15 @@ public:
 
 protected:
 	/** The set of required team IDs (must be one of these IDs to not be filtered out) */
-	UPROPERTY(EditAnywhere, Category = "Targeting Filter | Class", Meta = (AllowAbstract=true))
+	UPROPERTY(EditAnywhere, Category = "Targeting Filter | Team ID", Meta = (AllowAbstract = true))
 	TSet<uint8> RequiredTeamIDs;
 
 	/** The set of ignored team IDs (must NOT be one of these IDs) */
-	UPROPERTY(EditAnywhere, Category = "Targeting Filter | Class", Meta = (AllowAbstract = true))
+	UPROPERTY(EditAnywhere, Category = "Targeting Filter | Team ID", Meta = (AllowAbstract = true))
 	TSet<uint8> IgnoredTeamIDs;
 
 	/** Add source actor's team ID to "IgnoredTeamIDs" */
-	UPROPERTY(EditAnywhere, Category = "Targeting Filter | Class", Meta = (AllowAbstract=true))
+	UPROPERTY(EditAnywhere, Category = "Targeting Filter | Team ID", Meta = (AllowAbstract = true))
 	bool bIgnoreSourceActorTeamID = true;
 
 private:
