@@ -12,10 +12,7 @@ class UTcPawnExtensionComponent;
 class UTcPawnData;
 class ATcPlayerController;
 class ATcPlayerState;
-class UAttributeSet;
-class UTcAbilitySet;
 class UTcAbilitySystemComponent;
-class UAbilitySystemComponent;
 class UTcHealthComponent;
 
 UCLASS()

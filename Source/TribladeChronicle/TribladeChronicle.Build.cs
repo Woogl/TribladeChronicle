@@ -8,8 +8,28 @@ public class TribladeChronicle : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "GameplayAbilities", "ModularGameplay", "AIModule", });
+		PublicDependencyModuleNames.AddRange(
+			new string[]
+			{
+				"Core", 
+				"CoreUObject", 
+				"Engine", 
+				"GameplayTags",
+				"GameplayTasks",
+				"GameplayAbilities",
+				"AIModule", 
+				"ModularGameplay", 
+				"ModularGameplayActors",
+			});
 
-		PrivateDependencyModuleNames.AddRange(new string[] { "GameplayTags", "GameplayTasks", });
+		PrivateDependencyModuleNames.AddRange(
+			new string[]
+			{
+				"InputCore", 
+				"EnhancedInput", 
+				"UMG",
+				"CommonGame",
+				"CommonUser",
+			});
 	}
 }

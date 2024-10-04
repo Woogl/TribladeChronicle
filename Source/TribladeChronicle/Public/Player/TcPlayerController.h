@@ -3,15 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CommonPlayerController.h"
 #include "GenericTeamAgentInterface.h"
-#include "GameFramework/PlayerController.h"
 #include "TcPlayerController.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class TRIBLADECHRONICLE_API ATcPlayerController : public APlayerController, public IGenericTeamAgentInterface
+class TRIBLADECHRONICLE_API ATcPlayerController : public ACommonPlayerController, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 
