@@ -4,26 +4,26 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/Tasks/AbilityTask.h"
-#include "TcAbilityTask_LookAtTarget.generated.h"
+#include "TcAbilityTask_LookAtLocation.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnLookAtTargetFinished);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnLookAtLocationFinished);
 
 /**
  * 
  */
 UCLASS()
-class TRIBLADECHRONICLE_API UTcAbilityTask_LookAtTarget : public UAbilityTask
+class TRIBLADECHRONICLE_API UTcAbilityTask_LookAtLocation : public UAbilityTask
 {
 	GENERATED_BODY()
 
 public:
-	UTcAbilityTask_LookAtTarget();
+	UTcAbilityTask_LookAtLocation();
 	
 	UPROPERTY(BlueprintAssignable)
-	FOnLookAtTargetFinished OnFinished;
+	FOnLookAtLocationFinished OnFinished;
 
 	UFUNCTION(BlueprintCallable, Category="Ability|Tasks", meta=(HidePin = "OwningAbility", DefaultToSelf = "OwningAbility", Duration = "0.2", BlueprintInternalUseOnly = "TRUE"))
-	static UTcAbilityTask_LookAtTarget* LookAtTarget(UGameplayAbility* OwningAbility, AActor* TargetActor, float Duration, bool bEaseIn, bool bEaseOut);
+	static UTcAbilityTask_LookAtLocation* LookAtLocation(UGameplayAbility* OwningAbility, FVector TargetLocation, float Duration, bool bEaseIn, bool bEaseOut);
 
 protected:
 	virtual void Activate() override;
@@ -34,7 +34,7 @@ private:
 	float Duration;
 	
 	UPROPERTY()
-	AActor* TargetActor;
+	FVector TargetLocation;
 	
 	bool bEaseIn;
 	bool bEaseOut;
