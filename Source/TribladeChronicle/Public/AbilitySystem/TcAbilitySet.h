@@ -7,6 +7,7 @@
 #include "Engine/DataAsset.h"
 #include "TcAbilitySet.generated.h"
 
+class UTcAbilitySystemComponent;
 class UAttributeSet;
 class UGameplayEffect;
 class UAbilitySystemComponent;
@@ -71,7 +72,7 @@ class TRIBLADECHRONICLE_API UTcAbilitySet : public UPrimaryDataAsset
 	GENERATED_BODY()
 
 public:
-	void GiveToAbilitySystem(UAbilitySystemComponent* ASC, UObject* SourceObject = nullptr) const;
+	void GiveToAbilitySystem(UTcAbilitySystemComponent* ASC, UObject* SourceObject = nullptr) const;
 
 protected:
 	// Gameplay abilities to grant when this ability set is granted.

@@ -9,6 +9,7 @@
 #include "AbilitySystem/TcAbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Character/TcPawnData.h"
+#include "Equipment/TcEquipmentManagerComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Input/TcInputComponent.h"
 
@@ -22,6 +23,8 @@ ATcHeroCharacter::ATcHeroCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
+
+	EquipmentManagerComponent = CreateDefaultSubobject<UTcEquipmentManagerComponent>(TEXT("EquipmentManagerComponent"));
 }
 
 void ATcHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

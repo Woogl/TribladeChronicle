@@ -9,6 +9,7 @@
 
 class USpringArmComponent;
 class UCameraComponent;
+class UTcEquipmentManagerComponent;
 class UInputMappingContext;
 class UTcInputConfig;
 struct FInputActionValue;
@@ -27,6 +28,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UCameraComponent> FollowCamera;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Equipment", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UTcEquipmentManagerComponent> EquipmentManagerComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "TC|Pawn Data")
 	TObjectPtr<UInputMappingContext> DefaultMappingContext;

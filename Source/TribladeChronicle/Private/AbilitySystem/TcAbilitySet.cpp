@@ -4,8 +4,9 @@
 #include "AbilitySystem/TcAbilitySet.h"
 
 #include "AbilitySystemComponent.h"
+#include "AbilitySystem/TcAbilitySystemComponent.h"
 
-void UTcAbilitySet::GiveToAbilitySystem(UAbilitySystemComponent* ASC, UObject* SourceObject) const
+void UTcAbilitySet::GiveToAbilitySystem(UTcAbilitySystemComponent* ASC, UObject* SourceObject) const
 {
 	check(ASC);
 

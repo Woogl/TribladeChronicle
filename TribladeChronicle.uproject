@@ -14,7 +14,9 @@
 				"EnhancedInput",
 				"TargetingSystem",
 				"AIModule",
-				"CommonGame"
+				"CommonGame",
+				"ModularGameplay",
+				"CoreUObject"
 			]
 		}
 	],
