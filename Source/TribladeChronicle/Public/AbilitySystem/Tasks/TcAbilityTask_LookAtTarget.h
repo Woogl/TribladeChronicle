@@ -22,6 +22,8 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnLookAtTargetFinished OnFinished;
 
+	virtual void InitSimulatedTask(UGameplayTasksComponent& InGameplayTasksComponent) override;
+
 	UFUNCTION(BlueprintCallable, Category="Ability|Tasks", meta=(HidePin = "OwningAbility", DefaultToSelf = "OwningAbility", Duration = "0.2", BlueprintInternalUseOnly = "TRUE"))
 	static UTcAbilityTask_LookAtTarget* LookAtTarget(UGameplayAbility* OwningAbility, AActor* TargetActor, float Duration, bool bEaseIn, bool bEaseOut);
 
@@ -30,10 +32,10 @@ protected:
 	virtual void TickTask(float DeltaTime) override;
 
 private:
-	UPROPERTY()
+	UPROPERTY(Replicated)
 	float Duration;
 	
-	UPROPERTY()
+	UPROPERTY(Replicated)
 	AActor* TargetActor;
 	
 	bool bEaseIn;

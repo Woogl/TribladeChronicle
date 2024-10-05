@@ -4,6 +4,7 @@
 #include "AbilitySystem/Tasks/TcAbilityTask_LookAtTarget.h"
 
 #include "Kismet/KismetMathLibrary.h"
+#include "Net/UnrealNetwork.h"
 
 UTcAbilityTask_LookAtTarget::UTcAbilityTask_LookAtTarget()
 {
@@ -20,6 +21,20 @@ UTcAbilityTask_LookAtTarget::UTcAbilityTask_LookAtTarget()
 	TargetActor = nullptr;
 }
 
+void UTcAbilityTask_LookAtTarget::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const
+{
+	DOREPLIFETIME(ThisClass, Duration);
+	DOREPLIFETIME(ThisClass, TargetActor);
+}
+
+void UTcAbilityTask_LookAtTarget::InitSimulatedTask(UGameplayTasksComponent& InGameplayTasksComponent)
+{
+	Super::InitSimulatedTask(InGameplayTasksComponent);
+
+	StartTime = GetWorld()->GetTimeSeconds();
+	EndTime = StartTime + Duration;
+}
+
 UTcAbilityTask_LookAtTarget* UTcAbilityTask_LookAtTarget::LookAtTarget(UGameplayAbility* OwningAbility, AActor* TargetActor, float Duration, bool bEaseIn, bool bEaseOut)
 {
 	UTcAbilityTask_LookAtTarget* MyTask = NewAbilityTask<UTcAbilityTask_LookAtTarget>(OwningAbility);
@@ -27,7 +42,7 @@ UTcAbilityTask_LookAtTarget* UTcAbilityTask_LookAtTarget::LookAtTarget(UGameplay
 	{
 		MyTask->TargetActor = TargetActor;
 	}
-	MyTask->Duration = Duration;
+	MyTask->Duration = FMath::Max(Duration, 0.001f);
 	MyTask->bEaseIn = bEaseIn;
 	MyTask->bEaseOut = bEaseOut;
 	return MyTask;

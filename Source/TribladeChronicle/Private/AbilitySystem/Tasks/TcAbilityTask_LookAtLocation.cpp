@@ -4,6 +4,7 @@
 #include "AbilitySystem/Tasks/TcAbilityTask_LookAtLocation.h"
 
 #include "Kismet/KismetMathLibrary.h"
+#include "Net/UnrealNetwork.h"
 
 UTcAbilityTask_LookAtLocation::UTcAbilityTask_LookAtLocation()
 {
@@ -20,11 +21,25 @@ UTcAbilityTask_LookAtLocation::UTcAbilityTask_LookAtLocation()
 	TargetLocation = FVector::ZeroVector;
 }
 
+void UTcAbilityTask_LookAtLocation::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const
+{
+	DOREPLIFETIME(ThisClass, Duration);
+	DOREPLIFETIME(ThisClass, TargetLocation);
+}
+
+void UTcAbilityTask_LookAtLocation::InitSimulatedTask(UGameplayTasksComponent& InGameplayTasksComponent)
+{
+	Super::InitSimulatedTask(InGameplayTasksComponent);
+
+	StartTime = GetWorld()->GetTimeSeconds();
+	EndTime = StartTime + Duration;
+}
+
 UTcAbilityTask_LookAtLocation* UTcAbilityTask_LookAtLocation::LookAtLocation(UGameplayAbility* OwningAbility, FVector TargetLocation, float Duration, bool bEaseIn, bool bEaseOut)
 {
 	UTcAbilityTask_LookAtLocation* MyTask = NewAbilityTask<UTcAbilityTask_LookAtLocation>(OwningAbility);
 	MyTask->TargetLocation = TargetLocation;
-	MyTask->Duration = Duration;
+	MyTask->Duration = FMath::Max(Duration, 0.001f);
 	MyTask->bEaseIn = bEaseIn;
 	MyTask->bEaseOut = bEaseOut;
 	return MyTask;
