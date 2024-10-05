@@ -9,7 +9,7 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnLookAtTargetFinished);
 
 /**
- * 
+ *  * The source actor adjust rotation to face the target actor.
  */
 UCLASS()
 class TRIBLADECHRONICLE_API UTcAbilityTask_LookAtTarget : public UAbilityTask

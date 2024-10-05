@@ -50,6 +50,9 @@ void UTcAbilityTask_LookAtTarget::TickTask(float DeltaTime)
 	}
 	
 	FRotator TargetRotation = UKismetMathLibrary::FindLookAtRotation(GetAvatarActor()->GetActorLocation(), TargetActor->GetActorLocation());
+	TargetRotation.Pitch = GetAvatarActor()->GetActorRotation().Pitch;
+	TargetRotation.Roll = GetAvatarActor()->GetActorRotation().Roll;
+	
 	float Alpha = (GetWorld()->GetTimeSeconds() - StartTime) / Duration;
 	
 	FRotator NewRotation;
