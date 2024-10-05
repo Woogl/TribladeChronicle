@@ -11,7 +11,7 @@
  * 
  */
 UCLASS(Blueprintable)
-class TCTARGETINGSYSTEM_API UTcTargetingFilterTask_TeamID : public UTargetingFilterTask_BasicFilterTemplate
+class TRIBLADECHRONICLE_API UTcTargetingFilterTask_TeamID : public UTargetingFilterTask_BasicFilterTemplate
 {
 	GENERATED_BODY()
 

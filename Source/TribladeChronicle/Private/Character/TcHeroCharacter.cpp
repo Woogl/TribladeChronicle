@@ -48,6 +48,14 @@ void ATcHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	}
 }
 
+void ATcHeroCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// 0 for player team, 1 for enemy team
+	SetGenericTeamId(0);
+}
+
 void ATcHeroCharacter::Input_Move(const FInputActionValue& Value)
 {
 	FVector2D MovementVector = Value.Get<FVector2D>();

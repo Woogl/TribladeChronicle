@@ -5,6 +5,12 @@
 
 #include "AbilitySystem/TcAbilitySystemComponent.h"
 
+UTcGameplayAbility::UTcGameplayAbility()
+{
+	bServerRespectsRemoteAbilityCancellation = false;
+	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
+}
+
 UTcAbilitySystemComponent* UTcGameplayAbility::GetTcAbilitySystemComponentFromActorInfo() const
 {
 	if (CurrentActorInfo)

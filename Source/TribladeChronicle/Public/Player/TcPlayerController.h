@@ -4,27 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "CommonPlayerController.h"
-#include "GenericTeamAgentInterface.h"
 #include "TcPlayerController.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class TRIBLADECHRONICLE_API ATcPlayerController : public ACommonPlayerController, public IGenericTeamAgentInterface
+class TRIBLADECHRONICLE_API ATcPlayerController : public ACommonPlayerController
 {
 	GENERATED_BODY()
 
 public:
-	ATcPlayerController();
-	
 	virtual void PostProcessInput(const float DeltaTime, const bool bGamePaused) override;
-
-	//~Begin IGenericTeamAgentInterface
-	virtual void SetGenericTeamId(const FGenericTeamId& TeamID) override { MyTeamID = TeamID; }
-	virtual FGenericTeamId GetGenericTeamId() const override { return MyTeamID; }
-	//~End IGenericTeamAgentInterface
 	
-private:
-	FGenericTeamId MyTeamID;
 };

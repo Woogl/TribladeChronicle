@@ -6,12 +6,6 @@
 #include "AbilitySystem/TcAbilitySystemComponent.h"
 #include "Player/TcPlayerState.h"
 
-ATcPlayerController::ATcPlayerController()
-{
-	// 0 for player, 1 for enemy
-	SetGenericTeamId(0);
-}
-
 void ATcPlayerController::PostProcessInput(const float DeltaTime, const bool bGamePaused)
 {
 	if (ATcPlayerState* TcPS = GetPlayerState<ATcPlayerState>())

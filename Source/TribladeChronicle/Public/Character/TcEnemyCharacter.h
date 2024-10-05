@@ -16,7 +16,7 @@ class TRIBLADECHRONICLE_API ATcEnemyCharacter : public ATcCharacter
 
 public:
 	ATcEnemyCharacter();
-	
-protected:
 
+protected:
+	virtual void BeginPlay() override;
 };

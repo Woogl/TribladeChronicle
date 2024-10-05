@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
 #include "GameplayTagAssetInterface.h"
+#include "GenericTeamAgentInterface.h"
 #include "GameFramework/Character.h"
 #include "TcCharacter.generated.h"
 
@@ -16,7 +17,7 @@ class UTcAbilitySystemComponent;
 class UTcHealthComponent;
 
 UCLASS()
-class TRIBLADECHRONICLE_API ATcCharacter : public ACharacter,  public IAbilitySystemInterface, public IGameplayTagAssetInterface
+class TRIBLADECHRONICLE_API ATcCharacter : public ACharacter,  public IAbilitySystemInterface, public IGameplayTagAssetInterface, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 
@@ -51,6 +52,11 @@ public:
 
 	const UTcPawnData* GetPawnData() const { return PawnData; }
 
+	//~Begin IGenericTeamAgentInterface
+	virtual void SetGenericTeamId(const FGenericTeamId& TeamID) override { MyTeamID = TeamID; }
+	virtual FGenericTeamId GetGenericTeamId() const override { return MyTeamID; }
+	//~End IGenericTeamAgentInterface
+	
 protected:
 	virtual void OnAbilitySystemInitialized();
 	virtual void OnAbilitySystemUninitialized();
@@ -72,5 +78,9 @@ protected:
 	void DisableMovementAndCollision();
 
 private:
+	UPROPERTY(ReplicatedUsing = OnRep_MyTeamID)
+	FGenericTeamId MyTeamID;
 
+	UFUNCTION()
+	void OnRep_MyTeamID(FGenericTeamId OldTeamID);
 };

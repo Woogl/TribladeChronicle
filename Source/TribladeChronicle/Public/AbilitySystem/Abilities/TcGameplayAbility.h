@@ -33,6 +33,8 @@ class TRIBLADECHRONICLE_API UTcGameplayAbility : public UGameplayAbility
 	GENERATED_BODY()
 
 public:
+	UTcGameplayAbility();
+	
 	UFUNCTION(BlueprintCallable, Category = "TC|Ability")
 	UTcAbilitySystemComponent* GetTcAbilitySystemComponentFromActorInfo() const;
 	

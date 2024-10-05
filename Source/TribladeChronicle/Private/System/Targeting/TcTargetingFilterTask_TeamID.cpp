@@ -1,7 +1,7 @@
 // Copyright Woogle. All Rights Reserved.
 
 
-#include "TcTargetingFilterTask_TeamID.h"
+#include "System/Targeting/TcTargetingFilterTask_TeamID.h"
 
 #include "GenericTeamAgentInterface.h"
 
@@ -61,12 +61,9 @@ FGenericTeamId UTcTargetingFilterTask_TeamID::FindTeamID(AActor* TargetActor) co
 {
 	if (APawn* Pawn = Cast<APawn>(TargetActor))
 	{
-		if (AController* Controller = Pawn->GetController())
+		if (IGenericTeamAgentInterface* Interface = Cast<IGenericTeamAgentInterface>(Pawn))
 		{
-			if (IGenericTeamAgentInterface* Interface = Cast<IGenericTeamAgentInterface>(Controller))
-			{
-				return Interface->GetGenericTeamId();
-			}
+			return Interface->GetGenericTeamId();
 		}
 	}
 	return FGenericTeamId::NoTeam;

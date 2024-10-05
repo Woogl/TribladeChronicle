@@ -3,9 +3,14 @@
 
 #include "Character/TcEnemyCharacter.h"
 
-#include "Character/TcPawnExtensionComponent.h"
-#include "Player/TcPlayerState.h"
-
 ATcEnemyCharacter::ATcEnemyCharacter()
 {
+}
+
+void ATcEnemyCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// 0 for player team, 1 for enemy team
+	SetGenericTeamId(1);
 }

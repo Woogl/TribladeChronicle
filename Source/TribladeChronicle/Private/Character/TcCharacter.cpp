@@ -9,6 +9,7 @@
 #include "Character/TcPawnExtensionComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Net/UnrealNetwork.h"
 #include "Player/TcPlayerController.h"
 #include "Player/TcPlayerState.h"
 
@@ -51,6 +52,15 @@ ATcCharacter::ATcCharacter()
 
 	BaseEyeHeight = 80.0f;
 	CrouchedEyeHeight = 50.0f;
+
+	MyTeamID = FGenericTeamId::NoTeam;
+}
+
+void ATcCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ThisClass, MyTeamID);
 }
 
 ATcPlayerController* ATcCharacter::GetTcPlayerController() const
@@ -175,5 +185,9 @@ void ATcCharacter::DisableMovementAndCollision()
 
 	GetCharacterMovement()->StopMovementImmediately();
 	GetCharacterMovement()->DisableMovement();
+}
+
+void ATcCharacter::OnRep_MyTeamID(FGenericTeamId OldTeamID)
+{
 }
 

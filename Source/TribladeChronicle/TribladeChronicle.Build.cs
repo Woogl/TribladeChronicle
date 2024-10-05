@@ -30,6 +30,7 @@ public class TribladeChronicle : ModuleRules
 				"UMG",
 				"CommonGame",
 				"CommonUser",
+				"TargetingSystem",
 			});
 	}
 }
