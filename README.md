@@ -55,7 +55,7 @@ I am developing an action RPG game using Unreal Engine 5.4
 ### 7. Combo Attack
 ![ComboAttack-ezgif com-optimize](https://github.com/user-attachments/assets/3a2f64ae-1172-40d4-b158-7a40fb5e4170)
 
-- Combo Window(Anim notify state) defines the duration for retriggering the next combo.
+- `ANS_ComboWindow`(Anim notify state) defines the duration of the next combo attack.
 
 >💾 2024.09.22
 
@@ -86,3 +86,8 @@ I am developing an action RPG game using Unreal Engine 5.4
     - https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-viewmodel?application_version=5.4
  
 >💾 2024.10.05
+
+### 12. Repositioning During Attacks
+![Repositioning](https://github.com/user-attachments/assets/b2b739e6-5330-46d9-b589-66fb5e231566)
+
+>💾 2024.10.06
