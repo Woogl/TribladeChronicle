@@ -90,4 +90,7 @@ I am developing an action RPG game using Unreal Engine 5.4
 ### 12. Repositioning During Attacks
 ![Repositioning](https://github.com/user-attachments/assets/b2b739e6-5330-46d9-b589-66fb5e231566)
 
+- **UTcAbilityTask_LookAtTarget**
+  - The source actor adjusts its yaw to face the target actor.
+
 >💾 2024.10.06
