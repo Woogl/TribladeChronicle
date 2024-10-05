@@ -77,3 +77,12 @@ I am developing an action RPG game using Unreal Engine 5.4
 - Data-driven setting with Gameplay Targeting System. 
 
 >💾 2024.10.03
+
+### 11. MVVM Based View Binding
+![image](https://github.com/user-attachments/assets/0966d2a6-ef62-4d07-aa6d-4455aac7593d)
+![image](https://github.com/user-attachments/assets/9696335a-371c-479b-bb2c-4fb2b8e9d36d)
+
+- **UMG Viewmodel documentation** 
+    - https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-viewmodel?application_version=5.4
+ 
+>💾 2024.10.05
