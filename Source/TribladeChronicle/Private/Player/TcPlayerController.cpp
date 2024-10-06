@@ -4,13 +4,13 @@
 #include "Player/TcPlayerController.h"
 
 #include "AbilitySystem/TcAbilitySystemComponent.h"
-#include "Player/TcPlayerState.h"
+#include "Character/TcCharacter.h"
 
 void ATcPlayerController::PostProcessInput(const float DeltaTime, const bool bGamePaused)
 {
-	if (ATcPlayerState* TcPS = GetPlayerState<ATcPlayerState>())
+	if (ATcCharacter* TcCharacter = Cast<ATcCharacter>(GetPawn()))
 	{
-		if (UTcAbilitySystemComponent* TcASC = TcPS->GetTcAbilitySystemComponent())
+		if (UTcAbilitySystemComponent* TcASC = TcCharacter->GetTcAbilitySystemComponent())
 		{
 			TcASC->ProcessAbilityInput(DeltaTime, bGamePaused);
 		}

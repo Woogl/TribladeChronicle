@@ -9,6 +9,7 @@
 #include "GameFramework/Character.h"
 #include "TcCharacter.generated.h"
 
+class UTcHealthSet;
 class UTcPawnExtensionComponent;
 class UTcPawnData;
 class ATcPlayerController;
@@ -22,8 +23,8 @@ class TRIBLADECHRONICLE_API ATcCharacter : public ACharacter,  public IAbilitySy
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "TC|Character", Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UTcPawnExtensionComponent> PawnExtComponent;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "TC|Ability", Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UTcAbilitySystemComponent> AbilitySystemComponent;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "TC|Character", Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UTcHealthComponent> HealthComponent;
@@ -42,7 +43,8 @@ public:
 	
 	// IAbilitySystemInterface
 	UFUNCTION(BlueprintCallable, Category = "TC|Character")
-	UTcAbilitySystemComponent* GetTcAbilitySystemComponent() const;
+	UTcAbilitySystemComponent* GetTcAbilitySystemComponent() const { return AbilitySystemComponent; }
+	
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 	// IGameplayTagAssetInterface
@@ -63,8 +65,7 @@ protected:
 	
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void UnPossessed() override;
-
-	virtual void OnRep_Controller() override;
+	
 	virtual void OnRep_PlayerState() override;
 
 	// Begins the death sequence for the character (disables collision, disables movement, etc...)
@@ -83,4 +84,8 @@ private:
 
 	UFUNCTION()
 	void OnRep_MyTeamID(FGenericTeamId OldTeamID);
+
+private:
+	UPROPERTY()
+	TObjectPtr<const UTcHealthSet> HealthSet;
 };

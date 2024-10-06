@@ -3,13 +3,80 @@
 
 #include "AbilitySystem/TcAbilitySystemComponent.h"
 
+#include "TcLogs.h"
+#include "AbilitySystem/TcAbilitySet.h"
 #include "AbilitySystem/Abilities/TcGameplayAbility.h"
+#include "Character/TcPawnData.h"
 
 UTcAbilitySystemComponent::UTcAbilitySystemComponent()
 {
 	InputPressedSpecHandles.Reset();
 	InputReleasedSpecHandles.Reset();
 	InputHeldSpecHandles.Reset();
+}
+
+void UTcAbilitySystemComponent::InitializeAbilitySystem(UTcPawnData* InPawnData, AActor* InOwnerActor)
+{
+	check(InOwnerActor);
+	
+	// Clean up the old ability system component.
+	UninitializeAbilitySystem();
+
+	APawn* Pawn = Cast<APawn>(GetOwner());
+	AActor* ExistingAvatar = GetAvatarActor();
+
+	UE_LOG(LogTc, Verbose, TEXT("Setting up ASC [%s] on pawn [%s] owner [%s], existing [%s] "), *GetNameSafe(this), *GetNameSafe(Pawn), *GetNameSafe(InOwnerActor), *GetNameSafe(ExistingAvatar));
+
+	if ((ExistingAvatar != nullptr) && (ExistingAvatar != Pawn))
+	{
+		UE_LOG(LogTc, Log, TEXT("Existing avatar (authority=%d)"), ExistingAvatar->HasAuthority() ? 1 : 0);
+	}
+
+	InitAbilityActorInfo(InOwnerActor, Pawn);
+
+	check(InPawnData);
+
+	if (InOwnerActor->GetLocalRole() != ROLE_Authority)
+	{
+		return;
+	}
+	
+	for (const UTcAbilitySet* AbilitySet : InPawnData->AbilitySets)
+	{
+		if (AbilitySet)
+		{
+			AbilitySet->GiveToAbilitySystem(this, nullptr);
+		}
+	}
+
+	Pawn->ForceNetUpdate();
+
+	OnAbilitySystemInitialized.Broadcast();
+}
+
+void UTcAbilitySystemComponent::UninitializeAbilitySystem()
+{
+	// Uninitialize the ASC if we're still the avatar actor (otherwise another pawn already did it when they became the avatar actor)
+	if (GetAvatarActor() == GetOwner())
+	{
+		FGameplayTagContainer AbilityTypesToCancel;
+		CancelAbilities(&AbilityTypesToCancel);
+
+		ClearAbilityInput();
+		RemoveAllGameplayCues();
+
+		if (GetOwnerActor() != nullptr)
+		{
+			SetAvatarActor(nullptr);
+		}
+		else
+		{
+			// If the ASC doesn't have a valid owner, we need to clear *all* actor info, not just the avatar pairing
+			ClearActorInfo();
+		}
+
+		OnAbilitySystemUninitialized.Broadcast();
+	}
 }
 
 void UTcAbilitySystemComponent::InitAbilityActorInfo(AActor* InOwnerActor, AActor* InAvatarActor)

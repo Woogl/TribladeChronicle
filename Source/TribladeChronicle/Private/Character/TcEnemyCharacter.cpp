@@ -3,8 +3,11 @@
 
 #include "Character/TcEnemyCharacter.h"
 
+#include "AbilitySystem/TcAbilitySystemComponent.h"
+
 ATcEnemyCharacter::ATcEnemyCharacter()
 {
+	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
 }
 
 void ATcEnemyCharacter::BeginPlay()

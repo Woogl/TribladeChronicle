@@ -5,7 +5,6 @@
 
 ATcEnemyController::ATcEnemyController()
 {
-	bWantsPlayerState = true;
 	bStopAILogicOnUnposses = false;
 }
 

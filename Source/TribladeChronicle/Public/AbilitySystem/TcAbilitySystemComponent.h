@@ -6,6 +6,8 @@
 #include "AbilitySystemComponent.h"
 #include "TcAbilitySystemComponent.generated.h"
 
+class UTcPawnData;
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAbilityInputTriggerEvent, FGameplayTag, InputTag);
 
 /**
@@ -18,6 +20,9 @@ class TRIBLADECHRONICLE_API UTcAbilitySystemComponent : public UAbilitySystemCom
 
 public:
 	UTcAbilitySystemComponent();
+
+	void InitializeAbilitySystem(UTcPawnData* InPawnData, AActor* InOwnerActor);
+	void UninitializeAbilitySystem();
 	
 	virtual void InitAbilityActorInfo(AActor* InOwnerActor, AActor* InAvatarActor) override;
 
@@ -27,6 +32,13 @@ public:
 	void ProcessAbilityInput(float DeltaTime, bool bGamePaused);
 	void ClearAbilityInput();
 
+public:
+	/** Delegate fired when our pawn becomes the ability system's avatar actor */
+	FSimpleMulticastDelegate OnAbilitySystemInitialized;
+
+	/** Delegate fired when our pawn is removed as the ability system's avatar actor */
+	FSimpleMulticastDelegate OnAbilitySystemUninitialized;
+	
 protected:
 	void TryActivateAbilitiesOnSpawn();
 	
