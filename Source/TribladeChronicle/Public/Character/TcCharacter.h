@@ -41,10 +41,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "TC|Character")
 	ATcPlayerState* GetTcPlayerState() const;
 	
-	// IAbilitySystemInterface
 	UFUNCTION(BlueprintCallable, Category = "TC|Character")
 	UTcAbilitySystemComponent* GetTcAbilitySystemComponent() const { return AbilitySystemComponent; }
-	
+
+	// IAbilitySystemInterface
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 	// IGameplayTagAssetInterface
@@ -66,7 +66,7 @@ protected:
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void UnPossessed() override;
 	
-	virtual void OnRep_PlayerState() override;
+	virtual void OnRep_Controller() override;
 
 	// Begins the death sequence for the character (disables collision, disables movement, etc...)
 	UFUNCTION()

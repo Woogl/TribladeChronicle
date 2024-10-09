@@ -120,14 +120,7 @@ void ATcCharacter::PossessedBy(AController* NewController)
 	Super::PossessedBy(NewController);
 	
 	// Init ability actor info for the Server
-	if (GetTcPlayerState())
-	{
-		GetTcAbilitySystemComponent()->InitializeAbilitySystem(PawnData, GetTcPlayerState());
-	}
-	else
-	{
-		GetTcAbilitySystemComponent()->InitializeAbilitySystem(PawnData, this);
-	}
+	GetTcAbilitySystemComponent()->InitializeAbilitySystem(PawnData, this);
 	OnAbilitySystemInitialized();
 }
 
@@ -136,19 +129,12 @@ void ATcCharacter::UnPossessed()
 	Super::UnPossessed();
 }
 
-void ATcCharacter::OnRep_PlayerState()
+void ATcCharacter::OnRep_Controller()
 {
-	Super::OnRep_PlayerState();
+	Super::OnRep_Controller();
 
 	// Init ability actor info for the Client
-	if (GetTcPlayerState())
-	{
-		GetTcAbilitySystemComponent()->InitializeAbilitySystem(PawnData, GetTcPlayerState());
-	}
-	else
-	{
-		GetTcAbilitySystemComponent()->InitializeAbilitySystem(PawnData, this);
-	}
+	GetTcAbilitySystemComponent()->InitializeAbilitySystem(PawnData, this);
 	OnAbilitySystemInitialized();
 }
 
