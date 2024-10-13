@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
+#include "TcPartyData.h"
 #include "Character/TcCharacter.h"
 #include "TcHeroCharacter.generated.h"
 
@@ -50,6 +51,13 @@ protected:
 	void Input_AbilityInputPressed(FGameplayTag InputTag);
 	void Input_AbilityInputReleased(FGameplayTag InputTag);
 
+private:
+	UPROPERTY(ReplicatedUsing = OnRep_PartyData, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<const UTcPartyData> PartyData;
+
+	UFUNCTION()
+	void OnRep_PartyData();
+	
 public:
 	FORCEINLINE USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }

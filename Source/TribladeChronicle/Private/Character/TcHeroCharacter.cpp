@@ -12,6 +12,7 @@
 #include "Equipment/TcEquipmentManagerComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Input/TcInputComponent.h"
+#include "Net/UnrealNetwork.h"
 #include "Player/TcPlayerState.h"
 
 ATcHeroCharacter::ATcHeroCharacter()
@@ -26,6 +27,13 @@ ATcHeroCharacter::ATcHeroCharacter()
 	FollowCamera->bUsePawnControlRotation = false;
 
 	EquipmentManagerComponent = CreateDefaultSubobject<UTcEquipmentManagerComponent>(TEXT("EquipmentManagerComponent"));
+}
+
+void ATcHeroCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ThisClass, PartyData);
 }
 
 void ATcHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -109,4 +117,8 @@ void ATcHeroCharacter::Input_AbilityInputPressed(FGameplayTag InputTag)
 void ATcHeroCharacter::Input_AbilityInputReleased(FGameplayTag InputTag)
 {
 	GetTcAbilitySystemComponent()->AbilityInputTagReleased(InputTag);
+}
+
+void ATcHeroCharacter::OnRep_PartyData()
+{
 }
