@@ -12,6 +12,7 @@
 #include "Equipment/TcEquipmentManagerComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Input/TcInputComponent.h"
+#include "Player/TcPlayerState.h"
 
 ATcHeroCharacter::ATcHeroCharacter()
 {
@@ -54,6 +55,22 @@ void ATcHeroCharacter::BeginPlay()
 
 	// 0 for player team, 1 for enemy team
 	SetGenericTeamId(0);
+}
+
+void ATcHeroCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	// Init ability actor info for the Server
+	GetTcAbilitySystemComponent()->InitializeAbilitySystem(PawnData, GetTcPlayerState(), this);
+}
+
+void ATcHeroCharacter::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+
+	// Init ability actor info for the Client
+	GetTcAbilitySystemComponent()->InitializeAbilitySystem(PawnData, GetTcPlayerState(), this);
 }
 
 void ATcHeroCharacter::Input_Move(const FInputActionValue& Value)

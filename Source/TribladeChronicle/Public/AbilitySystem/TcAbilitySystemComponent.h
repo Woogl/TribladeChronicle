@@ -21,7 +21,7 @@ class TRIBLADECHRONICLE_API UTcAbilitySystemComponent : public UAbilitySystemCom
 public:
 	UTcAbilitySystemComponent();
 
-	void InitializeAbilitySystem(UTcPawnData* InPawnData, AActor* InOwnerActor);
+	void InitializeAbilitySystem(UTcPawnData* InPawnData, AActor* InOwnerActor, AActor* InAvatarActor);
 	void UninitializeAbilitySystem();
 	
 	virtual void InitAbilityActorInfo(AActor* InOwnerActor, AActor* InAvatarActor) override;
@@ -38,6 +38,12 @@ public:
 
 	/** Delegate fired when our pawn is removed as the ability system's avatar actor */
 	FSimpleMulticastDelegate OnAbilitySystemUninitialized;
+
+	/** Register with the OnAbilitySystemInitialized delegate and broadcast if our pawn has been registered with the ability system component */
+	void OnAbilitySystemInitialized_RegisterAndCall(FSimpleMulticastDelegate::FDelegate Delegate);
+
+	/** Register with the OnAbilitySystemUninitialized delegate fired when our pawn is removed as the ability system's avatar actor */
+	void OnAbilitySystemUninitialized_Register(FSimpleMulticastDelegate::FDelegate Delegate);
 	
 protected:
 	void TryActivateAbilitiesOnSpawn();

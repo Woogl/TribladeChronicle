@@ -41,6 +41,9 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+
+	virtual void PossessedBy(AController* NewController) override;
+	virtual void OnRep_PlayerState() override;
 	
 	void Input_Move(const FInputActionValue& Value);
 	void Input_Look(const FInputActionValue& Value);

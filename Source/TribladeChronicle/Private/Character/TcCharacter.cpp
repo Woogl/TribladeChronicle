@@ -38,10 +38,6 @@ ATcCharacter::ATcCharacter()
 	GetCharacterMovement()->bCanWalkOffLedgesWhenCrouching = true;
 	GetCharacterMovement()->SetCrouchedHalfHeight(65.0f);
 
-	AbilitySystemComponent = CreateDefaultSubobject<UTcAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
-	AbilitySystemComponent->SetIsReplicated(true);
-	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
-
 	HealthComponent = CreateDefaultSubobject<UTcHealthComponent>(TEXT("HealthComponent"));
 	HealthComponent->OnDeathStarted.AddDynamic(this, &ThisClass::OnDeathStarted);
 	HealthComponent->OnDeathFinished.AddDynamic(this, &ThisClass::OnDeathFinished);
@@ -77,9 +73,18 @@ ATcPlayerState* ATcCharacter::GetTcPlayerState() const
 	return CastChecked<ATcPlayerState>(GetPlayerState(), ECastCheckedType::NullAllowed);
 }
 
+UTcAbilitySystemComponent* ATcCharacter::GetTcAbilitySystemComponent() const
+{
+	return Cast<UTcAbilitySystemComponent>(GetAbilitySystemComponent());
+}
+
 UAbilitySystemComponent* ATcCharacter::GetAbilitySystemComponent() const
 {
-	return AbilitySystemComponent;
+	if (ATcPlayerState* TcPS = GetPlayerState<ATcPlayerState>())
+	{
+		return TcPS->GetAbilitySystemComponent();
+	}
+	return GetComponentByClass<UTcAbilitySystemComponent>();
 }
 
 void ATcCharacter::GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const
@@ -119,37 +124,16 @@ void ATcCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 	
-	// Init ability actor info for the Server
-	if (GetTcPlayerState())
-	{
-		GetTcAbilitySystemComponent()->InitializeAbilitySystem(PawnData, GetTcPlayerState());
-	}
-	else
-	{
-		GetTcAbilitySystemComponent()->InitializeAbilitySystem(PawnData, this);
-	}
-	OnAbilitySystemInitialized();
-}
-
-void ATcCharacter::UnPossessed()
-{
-	Super::UnPossessed();
+	GetTcAbilitySystemComponent()->OnAbilitySystemInitialized_RegisterAndCall(FSimpleMulticastDelegate::FDelegate::CreateUObject(this, &ThisClass::OnAbilitySystemInitialized));
+	GetTcAbilitySystemComponent()->OnAbilitySystemUninitialized_Register(FSimpleMulticastDelegate::FDelegate::CreateUObject(this, &ThisClass::OnAbilitySystemUninitialized));
 }
 
 void ATcCharacter::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
 
-	// Init ability actor info for the Client
-	if (GetTcPlayerState())
-	{
-		GetTcAbilitySystemComponent()->InitializeAbilitySystem(PawnData, GetTcPlayerState());
-	}
-	else
-	{
-		GetTcAbilitySystemComponent()->InitializeAbilitySystem(PawnData, this);
-	}
-	OnAbilitySystemInitialized();
+	GetTcAbilitySystemComponent()->OnAbilitySystemInitialized_RegisterAndCall(FSimpleMulticastDelegate::FDelegate::CreateUObject(this, &ThisClass::OnAbilitySystemInitialized));
+	GetTcAbilitySystemComponent()->OnAbilitySystemUninitialized_Register(FSimpleMulticastDelegate::FDelegate::CreateUObject(this, &ThisClass::OnAbilitySystemUninitialized));
 }
 
 void ATcCharacter::OnDeathStarted(AActor* OwningActor)

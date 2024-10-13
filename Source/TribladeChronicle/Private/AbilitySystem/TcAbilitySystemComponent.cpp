@@ -15,24 +15,24 @@ UTcAbilitySystemComponent::UTcAbilitySystemComponent()
 	InputHeldSpecHandles.Reset();
 }
 
-void UTcAbilitySystemComponent::InitializeAbilitySystem(UTcPawnData* InPawnData, AActor* InOwnerActor)
+void UTcAbilitySystemComponent::InitializeAbilitySystem(UTcPawnData* InPawnData, AActor* InOwnerActor, AActor* InAvatarActor)
 {
 	check(InOwnerActor);
+	check(InAvatarActor);
 	
 	// Clean up the old ability system component.
 	UninitializeAbilitySystem();
 
-	APawn* Pawn = Cast<APawn>(GetOwner());
 	AActor* ExistingAvatar = GetAvatarActor();
 
-	UE_LOG(LogTc, Verbose, TEXT("Setting up ASC [%s] on pawn [%s] owner [%s], existing [%s] "), *GetNameSafe(this), *GetNameSafe(Pawn), *GetNameSafe(InOwnerActor), *GetNameSafe(ExistingAvatar));
+	UE_LOG(LogTc, Verbose, TEXT("Setting up ASC [%s] on pawn [%s] owner [%s], existing [%s] "), *GetNameSafe(this), *GetNameSafe(InAvatarActor), *GetNameSafe(InOwnerActor), *GetNameSafe(ExistingAvatar));
 
-	if ((ExistingAvatar != nullptr) && (ExistingAvatar != Pawn))
+	if ((ExistingAvatar != nullptr) && (ExistingAvatar != InAvatarActor))
 	{
 		UE_LOG(LogTc, Log, TEXT("Existing avatar (authority=%d)"), ExistingAvatar->HasAuthority() ? 1 : 0);
 	}
 
-	InitAbilityActorInfo(InOwnerActor, Pawn);
+	InitAbilityActorInfo(InOwnerActor, InAvatarActor);
 
 	check(InPawnData);
 
@@ -49,7 +49,7 @@ void UTcAbilitySystemComponent::InitializeAbilitySystem(UTcPawnData* InPawnData,
 		}
 	}
 
-	Pawn->ForceNetUpdate();
+	InAvatarActor->ForceNetUpdate();
 
 	OnAbilitySystemInitialized.Broadcast();
 }
@@ -197,6 +197,24 @@ void UTcAbilitySystemComponent::ClearAbilityInput()
 	InputPressedSpecHandles.Reset();
 	InputReleasedSpecHandles.Reset();
 	InputHeldSpecHandles.Reset();
+}
+
+void UTcAbilitySystemComponent::OnAbilitySystemInitialized_RegisterAndCall(FSimpleMulticastDelegate::FDelegate Delegate)
+{
+	if (!OnAbilitySystemInitialized.IsBoundToObject(Delegate.GetUObject()))
+	{
+		OnAbilitySystemInitialized.Add(Delegate);
+	}
+	
+	Delegate.Execute();
+}
+
+void UTcAbilitySystemComponent::OnAbilitySystemUninitialized_Register(FSimpleMulticastDelegate::FDelegate Delegate)
+{
+	if (!OnAbilitySystemUninitialized.IsBoundToObject(Delegate.GetUObject()))
+	{
+		OnAbilitySystemUninitialized.Add(Delegate);
+	}
 }
 
 void UTcAbilitySystemComponent::TryActivateAbilitiesOnSpawn()
