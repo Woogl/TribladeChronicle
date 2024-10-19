@@ -7,6 +7,8 @@
 #include "TcPartyComponent.generated.h"
 
 
+class ATcPlayerController;
+class UTcPartyData;
 class ATcCharacter;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -17,6 +19,11 @@ class TRIBLADECHRONICLE_API UTcPartyComponent : public UActorComponent
 public:	
 	UTcPartyComponent();
 
+	void InitializePartySystem(UTcPartyData* InPartyData);
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	void Server_SpawnPartyMembers();
+	
 	UFUNCTION(BlueprintCallable)
 	ATcCharacter* GetCurrentPartyMember() const;
 	
@@ -24,12 +31,21 @@ public:
 	ATcCharacter* GetNextPartyMember() const;
 
 	UFUNCTION(BlueprintCallable)
-	void SetPartyMember(int32 PartyMemberIndex, ATcCharacter* Character);
+	void SetPartyMember(int32 MemberIndex, ATcCharacter* Character);
 
 	UFUNCTION(BlueprintCallable)
-	void SpawnPartyMembers();
+	void SwitchPartyMember(int32 MemberIndex);
 	
 private:
 	UPROPERTY(Replicated)
+	TObjectPtr<UTcPartyData> PartyData;
+	
+	UPROPERTY(Replicated)
 	TArray<ATcCharacter*> PartyMembers;
+
+	UPROPERTY(Replicated)
+	ATcPlayerController* OwningPlayerController;
+
+	UPROPERTY(Replicated)
+	APawn* OwningPawn;
 };

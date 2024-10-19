@@ -84,7 +84,7 @@ UAbilitySystemComponent* ATcCharacter::GetAbilitySystemComponent() const
 	{
 		return TcPS->GetAbilitySystemComponent();
 	}
-	return GetComponentByClass<UTcAbilitySystemComponent>();
+	return FindComponentByClass<UTcAbilitySystemComponent>();
 }
 
 void ATcCharacter::GetOwnedGameplayTags(FGameplayTagContainer& TagContainer) const
@@ -109,10 +109,10 @@ void ATcCharacter::ToggleCrouch()
 
 void ATcCharacter::OnAbilitySystemInitialized()
 {
-	UTcAbilitySystemComponent* TcASC = GetTcAbilitySystemComponent();
-	check(TcASC);
-
-	HealthComponent->InitializeWithAbilitySystem(TcASC);
+	if (UTcAbilitySystemComponent* TcASC = GetTcAbilitySystemComponent())
+	{
+		HealthComponent->InitializeWithAbilitySystem(TcASC);
+	}
 }
 
 void ATcCharacter::OnAbilitySystemUninitialized()
@@ -124,16 +124,16 @@ void ATcCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 	
-	GetTcAbilitySystemComponent()->OnAbilitySystemInitialized_RegisterAndCall(FSimpleMulticastDelegate::FDelegate::CreateUObject(this, &ThisClass::OnAbilitySystemInitialized));
-	GetTcAbilitySystemComponent()->OnAbilitySystemUninitialized_Register(FSimpleMulticastDelegate::FDelegate::CreateUObject(this, &ThisClass::OnAbilitySystemUninitialized));
+	//GetTcAbilitySystemComponent()->OnAbilitySystemInitialized_RegisterAndCall(FSimpleMulticastDelegate::FDelegate::CreateUObject(this, &ThisClass::OnAbilitySystemInitialized));
+	//GetTcAbilitySystemComponent()->OnAbilitySystemUninitialized_Register(FSimpleMulticastDelegate::FDelegate::CreateUObject(this, &ThisClass::OnAbilitySystemUninitialized));
 }
 
 void ATcCharacter::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
 
-	GetTcAbilitySystemComponent()->OnAbilitySystemInitialized_RegisterAndCall(FSimpleMulticastDelegate::FDelegate::CreateUObject(this, &ThisClass::OnAbilitySystemInitialized));
-	GetTcAbilitySystemComponent()->OnAbilitySystemUninitialized_Register(FSimpleMulticastDelegate::FDelegate::CreateUObject(this, &ThisClass::OnAbilitySystemUninitialized));
+	//GetTcAbilitySystemComponent()->OnAbilitySystemInitialized_RegisterAndCall(FSimpleMulticastDelegate::FDelegate::CreateUObject(this, &ThisClass::OnAbilitySystemInitialized));
+	//GetTcAbilitySystemComponent()->OnAbilitySystemUninitialized_Register(FSimpleMulticastDelegate::FDelegate::CreateUObject(this, &ThisClass::OnAbilitySystemUninitialized));
 }
 
 void ATcCharacter::OnDeathStarted(AActor* OwningActor)
@@ -167,8 +167,3 @@ void ATcCharacter::DisableMovementAndCollision()
 	GetCharacterMovement()->StopMovementImmediately();
 	GetCharacterMovement()->DisableMovement();
 }
-
-void ATcCharacter::OnRep_MyTeamID(FGenericTeamId OldTeamID)
-{
-}
-

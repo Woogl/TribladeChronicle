@@ -5,6 +5,13 @@
 
 #include "AbilitySystem/TcAbilitySystemComponent.h"
 #include "Character/TcCharacter.h"
+#include "Player/TcPartyComponent.h"
+
+ATcPlayerController::ATcPlayerController()
+{
+	PartyComponent = CreateDefaultSubobject<UTcPartyComponent>(TEXT("PartyComponent"));
+	PartyComponent->SetIsReplicated(true);
+}
 
 void ATcPlayerController::PostProcessInput(const float DeltaTime, const bool bGamePaused)
 {

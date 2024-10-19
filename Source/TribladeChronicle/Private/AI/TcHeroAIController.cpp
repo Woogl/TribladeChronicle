@@ -1,14 +1,14 @@
 // Copyright Woogle. All Rights Reserved.
 
 
-#include "Player/TcEnemyController.h"
+#include "AI/TcHeroAIController.h"
 
-ATcEnemyController::ATcEnemyController()
+ATcHeroAIController::ATcHeroAIController()
 {
-	bStopAILogicOnUnposses = false;
+	bWantsPlayerState = true;
 }
 
-ETeamAttitude::Type ATcEnemyController::GetTeamAttitudeTowards(const AActor& Other) const
+ETeamAttitude::Type ATcHeroAIController::GetTeamAttitudeTowards(const AActor& Other) const
 {
 	if (const APawn* OtherPawn = Cast<APawn>(&Other))
 	{

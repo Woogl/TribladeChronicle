@@ -27,14 +27,16 @@ ATcHeroCharacter::ATcHeroCharacter()
 	FollowCamera->bUsePawnControlRotation = false;
 
 	EquipmentManagerComponent = CreateDefaultSubobject<UTcEquipmentManagerComponent>(TEXT("EquipmentManagerComponent"));
+
+	SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	AutoPossessAI = EAutoPossessAI::Spawned;
 }
 
-void ATcHeroCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME(ThisClass, PartyData);
-}
+// void ATcHeroCharacter::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
+// {
+// 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+// 	
+// }
 
 void ATcHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -81,6 +83,16 @@ void ATcHeroCharacter::OnRep_PlayerState()
 	GetTcAbilitySystemComponent()->InitializeAbilitySystem(PawnData, GetTcPlayerState(), this);
 }
 
+void ATcHeroCharacter::FinishDestroy()
+{
+	Super::FinishDestroy();
+
+	if (GetPlayerState())
+	{
+		GetPlayerState()->Destroy();
+	}
+}
+
 void ATcHeroCharacter::Input_Move(const FInputActionValue& Value)
 {
 	FVector2D MovementVector = Value.Get<FVector2D>();
@@ -117,8 +129,4 @@ void ATcHeroCharacter::Input_AbilityInputPressed(FGameplayTag InputTag)
 void ATcHeroCharacter::Input_AbilityInputReleased(FGameplayTag InputTag)
 {
 	GetTcAbilitySystemComponent()->AbilityInputTagReleased(InputTag);
-}
-
-void ATcHeroCharacter::OnRep_PartyData()
-{
 }

@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
-#include "TcPartyData.h"
 #include "Character/TcCharacter.h"
 #include "TcHeroCharacter.generated.h"
 
@@ -42,21 +41,14 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void OnRep_PlayerState() override;
+	virtual void FinishDestroy() override;
 	
 	void Input_Move(const FInputActionValue& Value);
 	void Input_Look(const FInputActionValue& Value);
 	void Input_AbilityInputPressed(FGameplayTag InputTag);
 	void Input_AbilityInputReleased(FGameplayTag InputTag);
-
-private:
-	UPROPERTY(ReplicatedUsing = OnRep_PartyData, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<const UTcPartyData> PartyData;
-
-	UFUNCTION()
-	void OnRep_PartyData();
 	
 public:
 	FORCEINLINE USpringArmComponent* GetCameraBoom() const { return CameraBoom; }

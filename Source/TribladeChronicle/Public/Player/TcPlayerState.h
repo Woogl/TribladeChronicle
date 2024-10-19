@@ -35,9 +35,6 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UTcAbilitySystemComponent> AbilitySystemComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UTcPartyComponent> PartyComponent;
-
 	// Health attribute set used by this actor.
 	UPROPERTY()
 	TObjectPtr<const UTcHealthSet> HealthSet;

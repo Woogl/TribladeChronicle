@@ -24,8 +24,6 @@ public:
 	void InitializeAbilitySystem(UTcPawnData* InPawnData, AActor* InOwnerActor, AActor* InAvatarActor);
 	void UninitializeAbilitySystem();
 	
-	virtual void InitAbilityActorInfo(AActor* InOwnerActor, AActor* InAvatarActor) override;
-
 	void AbilityInputTagPressed(const FGameplayTag& InputTag);
 	void AbilityInputTagReleased(const FGameplayTag& InputTag);
 
@@ -46,8 +44,6 @@ public:
 	void OnAbilitySystemUninitialized_Register(FSimpleMulticastDelegate::FDelegate Delegate);
 	
 protected:
-	void TryActivateAbilitiesOnSpawn();
-	
 	virtual void AbilitySpecInputPressed(FGameplayAbilitySpec& Spec) override;
 	virtual void AbilitySpecInputReleased(FGameplayAbilitySpec& Spec) override;
 

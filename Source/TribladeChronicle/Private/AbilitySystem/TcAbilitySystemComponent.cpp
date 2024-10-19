@@ -41,11 +41,14 @@ void UTcAbilitySystemComponent::InitializeAbilitySystem(UTcPawnData* InPawnData,
 		return;
 	}
 	
-	for (const UTcAbilitySet* AbilitySet : InPawnData->AbilitySets)
+	if (InPawnData)
 	{
-		if (AbilitySet)
+		for (const UTcAbilitySet* AbilitySet : InPawnData->AbilitySets)
 		{
-			AbilitySet->GiveToAbilitySystem(this, nullptr);
+			if (AbilitySet)
+			{
+				AbilitySet->GiveToAbilitySystem(this, nullptr);
+			}
 		}
 	}
 
@@ -59,9 +62,7 @@ void UTcAbilitySystemComponent::UninitializeAbilitySystem()
 	// Uninitialize the ASC if we're still the avatar actor (otherwise another pawn already did it when they became the avatar actor)
 	if (GetAvatarActor() == GetOwner())
 	{
-		FGameplayTagContainer AbilityTypesToCancel;
-		CancelAbilities(&AbilityTypesToCancel);
-
+		CancelAbilities();
 		ClearAbilityInput();
 		RemoveAllGameplayCues();
 
@@ -76,18 +77,6 @@ void UTcAbilitySystemComponent::UninitializeAbilitySystem()
 		}
 
 		OnAbilitySystemUninitialized.Broadcast();
-	}
-}
-
-void UTcAbilitySystemComponent::InitAbilityActorInfo(AActor* InOwnerActor, AActor* InAvatarActor)
-{
-	const bool bHasNewPawnAvatar = Cast<APawn>(InAvatarActor) && (InAvatarActor != AbilityActorInfo.Get()->AvatarActor);
-	
-	Super::InitAbilityActorInfo(InOwnerActor, InAvatarActor);
-	
-	if (bHasNewPawnAvatar)
-	{
-		TryActivateAbilitiesOnSpawn();
 	}
 }
 
@@ -214,18 +203,6 @@ void UTcAbilitySystemComponent::OnAbilitySystemUninitialized_Register(FSimpleMul
 	if (!OnAbilitySystemUninitialized.IsBoundToObject(Delegate.GetUObject()))
 	{
 		OnAbilitySystemUninitialized.Add(Delegate);
-	}
-}
-
-void UTcAbilitySystemComponent::TryActivateAbilitiesOnSpawn()
-{
-	ABILITYLIST_SCOPE_LOCK();
-	for (const FGameplayAbilitySpec& AbilitySpec : ActivatableAbilities.Items)
-	{
-		if (const UTcGameplayAbility* TcAbilityCDO = Cast<UTcGameplayAbility>(AbilitySpec.Ability))
-		{
-			TcAbilityCDO->TryActivateAbilityOnSpawn(AbilityActorInfo.Get(), AbilitySpec);
-		}
 	}
 }
 

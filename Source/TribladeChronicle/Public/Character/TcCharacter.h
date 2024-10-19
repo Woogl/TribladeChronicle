@@ -49,7 +49,7 @@ public:
 	
 	void ToggleCrouch();
 
-	const UTcPawnData* GetPawnData() const { return PawnData; }
+	UTcPawnData* GetPawnData() const { return PawnData; }
 
 	//~Begin IGenericTeamAgentInterface
 	virtual void SetGenericTeamId(const FGenericTeamId& TeamID) override { MyTeamID = TeamID; }
@@ -74,11 +74,8 @@ protected:
 	void DisableMovementAndCollision();
 
 private:
-	UPROPERTY(ReplicatedUsing = OnRep_MyTeamID)
+	UPROPERTY(Replicated)
 	FGenericTeamId MyTeamID;
-
-	UFUNCTION()
-	void OnRep_MyTeamID(FGenericTeamId OldTeamID);
 
 private:
 	UPROPERTY()
