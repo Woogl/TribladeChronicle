@@ -3,83 +3,129 @@
 
 #include "AbilitySystem/Abilities/TcGameplayAbility.h"
 
+#include "EnhancedInputComponent.h"
 #include "AbilitySystem/TcAbilitySystemComponent.h"
+#include "GameFramework/Character.h"
 
 UTcGameplayAbility::UTcGameplayAbility()
 {
-	bServerRespectsRemoteAbilityCancellation = false;
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
 }
 
-UTcAbilitySystemComponent* UTcGameplayAbility::GetTcAbilitySystemComponentFromActorInfo() const
+void UTcGameplayAbility::OnAvatarSet(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)
 {
-	if (CurrentActorInfo)
+	Super::OnAvatarSet(ActorInfo, Spec);
+
+	// Set the "Avatar Character" reference.
+	AvatarCharacter = Cast<ACharacter>(ActorInfo->AvatarActor);
+
+	// Set up Bindings for Enhanced Input.
+	SetupEnhancedInputBindings(ActorInfo, Spec);
+
+	// Try to Activate immediately if "Activate Ability On Granted" is true.
+	if (ActivateAbilityOnGranted)
 	{
-		return Cast<UTcAbilitySystemComponent>(CurrentActorInfo->AbilitySystemComponent.Get());
+		ActorInfo->AbilitySystemComponent->TryActivateAbility(Spec.Handle);
 	}
-	return nullptr;
 }
 
-AController* UTcGameplayAbility::GetControllerFromActorInfo() const
+void UTcGameplayAbility::SetupEnhancedInputBindings(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)
 {
-	if (CurrentActorInfo)
+	if (IsValid(ActorInfo->AvatarActor.Get()))
 	{
-		if (AController* PC = CurrentActorInfo->PlayerController.Get())
+		if (const APawn* AvatarPawn = Cast<APawn>(ActorInfo->AvatarActor.Get()))
 		{
-			return PC;
-		}
-
-		// Look for a player controller or pawn in the owner chain.
-		AActor* TestActor = CurrentActorInfo->OwnerActor.Get();
-		while (TestActor)
-		{
-			if (AController* C = Cast<AController>(TestActor))
+			if (const AController* PawnController = AvatarPawn->GetController())
 			{
-				return C;
-			}
-
-			if (APawn* Pawn = Cast<APawn>(TestActor))
-			{
-				return Pawn->GetController();
-			}
-
-			TestActor = TestActor->GetOwner();
-		}
-	}
-
-	return nullptr;
-}
-
-void UTcGameplayAbility::TryActivateAbilityOnSpawn(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec) const
-{
-	const bool bIsPredicting = (Spec.ActivationInfo.ActivationMode == EGameplayAbilityActivationMode::Predicting);
-
-	// Try to activate if activation policy is on spawn.
-	if (ActorInfo && !Spec.IsActive() && !bIsPredicting && (ActivationPolicy == ETcAbilityActivationPolicy::OnSpawn))
-	{
-		UAbilitySystemComponent* ASC = ActorInfo->AbilitySystemComponent.Get();
-		const AActor* AvatarActor = ActorInfo->AvatarActor.Get();
-
-		// If avatar actor is torn off or about to die, don't try to activate until we get the new one.
-		if (ASC && AvatarActor && !AvatarActor->GetTearOff() && (AvatarActor->GetLifeSpan() <= 0.0f))
-		{
-			const bool bIsLocalExecution = (NetExecutionPolicy == EGameplayAbilityNetExecutionPolicy::LocalPredicted) || (NetExecutionPolicy == EGameplayAbilityNetExecutionPolicy::LocalOnly);
-			const bool bIsServerExecution = (NetExecutionPolicy == EGameplayAbilityNetExecutionPolicy::ServerOnly) || (NetExecutionPolicy == EGameplayAbilityNetExecutionPolicy::ServerInitiated);
-
-			const bool bClientShouldActivate = ActorInfo->IsLocallyControlled() && bIsLocalExecution;
-			const bool bServerShouldActivate = ActorInfo->IsNetAuthority() && bIsServerExecution;
-
-			if (bClientShouldActivate || bServerShouldActivate)
-			{
-				ASC->TryActivateAbility(Spec.Handle);
+				if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PawnController->InputComponent.Get()))
+				{
+					if (UTcGameplayAbility* AbilityInstance = Cast<UTcGameplayAbility>(Spec.Ability.Get()))
+					{
+						// If we have a valid "Input Pressed Trigger" type bind the pressed event.
+						if (IsValid(AbilityInstance->ActivationInputAction))
+						{
+							EnhancedInputComponent->BindAction(AbilityInstance->ActivationInputAction, ETriggerEvent::Started, AbilityInstance, &ThisClass::HandleInputPressedEvent, ActorInfo, Spec.Handle);
+							EnhancedInputComponent->BindAction(AbilityInstance->ActivationInputAction, ETriggerEvent::Completed, AbilityInstance, &ThisClass::HandleInputReleasedEvent, ActorInfo, Spec.Handle);
+						}
+					}
+				}
 			}
 		}
 	}
 }
 
-void UTcGameplayAbility::OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)
+void UTcGameplayAbility::HandleInputPressedEvent(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpecHandle SpecHandle)
 {
-	Super::OnGiveAbility(ActorInfo, Spec);
+	// Find the Ability Spec based on the passed in information and set a reference.
+	if (FGameplayAbilitySpec* Spec = ActorInfo->AbilitySystemComponent->FindAbilitySpecFromHandle(SpecHandle))
+	{
+		if (UAbilitySystemComponent* AbilitySystemComponent = ActorInfo->AbilitySystemComponent.Get())
+		{
+			Spec->InputPressed = true;
+			
+			if (Spec->IsActive())
+			{
+				if (Spec->Ability.Get()->bReplicateInputDirectly && AbilitySystemComponent->IsOwnerActorAuthoritative() == false)
+				{
+					AbilitySystemComponent->ServerSetInputPressed(Spec->Ability.Get()->GetCurrentAbilitySpecHandle());
+				}
+
+				AbilitySystemComponent->AbilitySpecInputPressed(*Spec);
+
+				// Invoke the InputPressed event. This is not replicated here. If someone is listening, they may replicate the InputPressed event to the server.
+				AbilitySystemComponent->InvokeReplicatedEvent(EAbilityGenericReplicatedEvent::InputPressed, Spec->Handle, Spec->ActivationInfo.GetActivationPredictionKey());
+			}
+			else
+			{
+				// Ability is not active, so try to activate it
+				AbilitySystemComponent->TryActivateAbility(SpecHandle);
+			}
+		}
+	}
+}
+
+void UTcGameplayAbility::HandleInputReleasedEvent(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpecHandle SpecHandle)
+{
+	// Find the Ability Spec based on the passed in information and set a reference.
+	if (FGameplayAbilitySpec* Spec = ActorInfo->AbilitySystemComponent->FindAbilitySpecFromHandle(SpecHandle))
+	{
+		if (UAbilitySystemComponent* AbilitySystemComponent = ActorInfo->AbilitySystemComponent.Get())
+		{
+			Spec->InputPressed = false;
+			
+			if (Spec && Spec->IsActive())
+			{
+				if (Spec->Ability.Get()->bReplicateInputDirectly && AbilitySystemComponent->IsOwnerActorAuthoritative() == false)
+				{
+					AbilitySystemComponent->ServerSetInputReleased(SpecHandle);
+				}
+
+				AbilitySystemComponent->AbilitySpecInputReleased(*Spec);
+
+				// Invoke the InputReleased event. This is not replicated here. If someone is listening, they may replicate the InputPressed event to the server.
+				AbilitySystemComponent->InvokeReplicatedEvent(EAbilityGenericReplicatedEvent::InputReleased, SpecHandle, Spec->ActivationInfo.GetActivationPredictionKey());
+			}
+		}
+	}
+}
+
+void UTcGameplayAbility::OnRemoveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)
+{
+	if (IsValid(ActorInfo->AvatarActor.Get()))
+	{
+		if (const APawn* AvatarPawn = Cast<APawn>(ActorInfo->AvatarActor.Get()))
+		{
+			if (const AController* PawnController = AvatarPawn->GetController())
+			{
+				if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PawnController->InputComponent.Get()))
+				{
+					// We need to clear the bindings from the Enhanced Input Component when the Ability is removed.
+					EnhancedInputComponent->ClearBindingsForObject(Spec.Ability.Get());
+				}
+			}
+		}
+	}
 	
-	TryActivateAbilityOnSpawn(ActorInfo, Spec);
+	Super::OnRemoveAbility(ActorInfo, Spec);
 }
+

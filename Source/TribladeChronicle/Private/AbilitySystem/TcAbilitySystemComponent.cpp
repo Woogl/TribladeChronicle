@@ -115,21 +115,21 @@ void UTcAbilitySystemComponent::ProcessAbilityInput(float DeltaTime, bool bGameP
 	static TArray<FGameplayAbilitySpecHandle> AbilitiesToActivate;
 	AbilitiesToActivate.Reset();
 	
-	for (const FGameplayAbilitySpecHandle& SpecHandle : InputHeldSpecHandles)
-	{
-		if (const FGameplayAbilitySpec* AbilitySpec = FindAbilitySpecFromHandle(SpecHandle))
-		{
-			if (AbilitySpec->Ability && !AbilitySpec->IsActive())
-			{
-				const UTcGameplayAbility* Tcbility = CastChecked<UTcGameplayAbility>(AbilitySpec->Ability);
-
-				if (Tcbility->GetActivationPolicy() == ETcAbilityActivationPolicy::WhileInputActive)
-				{
-					AbilitiesToActivate.AddUnique(AbilitySpec->Handle);
-				}
-			}
-		}
-	}
+	// for (const FGameplayAbilitySpecHandle& SpecHandle : InputHeldSpecHandles)
+	// {
+	// 	if (const FGameplayAbilitySpec* AbilitySpec = FindAbilitySpecFromHandle(SpecHandle))
+	// 	{
+	// 		if (AbilitySpec->Ability && !AbilitySpec->IsActive())
+	// 		{
+	// 			const UTcGameplayAbility* Tcbility = CastChecked<UTcGameplayAbility>(AbilitySpec->Ability);
+	//
+	// 			if (Tcbility->GetActivationPolicy() == ETcAbilityActivationPolicy::WhileInputActive)
+	// 			{
+	// 				AbilitiesToActivate.AddUnique(AbilitySpec->Handle);
+	// 			}
+	// 		}
+	// 	}
+	// }
 
 	for (const FGameplayAbilitySpecHandle& SpecHandle : InputPressedSpecHandles)
 	{
@@ -147,10 +147,10 @@ void UTcAbilitySystemComponent::ProcessAbilityInput(float DeltaTime, bool bGameP
 				{
 					const UTcGameplayAbility* TcAbility = CastChecked<UTcGameplayAbility>(AbilitySpec->Ability);
 
-					if (TcAbility->GetActivationPolicy() == ETcAbilityActivationPolicy::OnInputTriggered)
-					{
+					// if (TcAbility->GetActivationPolicy() == ETcAbilityActivationPolicy::OnInputTriggered)
+					// {
 						AbilitiesToActivate.AddUnique(AbilitySpec->Handle);
-					}
+					//}
 				}
 			}
 		}
