@@ -96,6 +96,7 @@ I am developing an action RPG game using Unreal Engine 5.4
 >💾 2024.10.06
 
 ### 13. Party System
+- **Party System Initialization Process**
 ![partycomponent](https://github.com/user-attachments/assets/2cad511f-8eb6-48ea-8def-7ba598c71557)
 
 >💾 2024.10.27
