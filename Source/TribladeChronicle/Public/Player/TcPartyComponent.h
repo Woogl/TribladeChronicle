@@ -20,9 +20,6 @@ public:
 	UTcPartyComponent();
 
 	void InitializePartySystem(UTcPartyData* InPartyData);
-
-	UFUNCTION(Server, Reliable, BlueprintCallable)
-	void Server_SpawnPartyMembers();
 	
 	UFUNCTION(BlueprintCallable)
 	ATcCharacter* GetCurrentPartyMember() const;
@@ -37,6 +34,9 @@ public:
 	void SwitchPartyMember(int32 MemberIndex);
 	
 private:
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	void Server_SpawnPartyMembers();
+	
 	UPROPERTY(Replicated)
 	TObjectPtr<UTcPartyData> PartyData;
 	

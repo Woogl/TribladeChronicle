@@ -10,6 +10,7 @@
 #include "Camera/CameraComponent.h"
 #include "Character/TcPawnData.h"
 #include "Equipment/TcEquipmentManagerComponent.h"
+#include "GameFramework/PawnMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Input/TcInputComponent.h"
 #include "Net/UnrealNetwork.h"
@@ -73,6 +74,12 @@ void ATcHeroCharacter::PossessedBy(AController* NewController)
 
 	// Init ability actor info for the Server
 	GetTcAbilitySystemComponent()->InitializeAbilitySystem(PawnData, GetTcPlayerState(), this);
+}
+
+void ATcHeroCharacter::UnPossessed()
+{
+	Super::UnPossessed();
+	GetMovementComponent()->StopMovementImmediately();
 }
 
 void ATcHeroCharacter::OnRep_PlayerState()

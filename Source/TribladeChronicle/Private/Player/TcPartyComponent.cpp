@@ -63,13 +63,11 @@ void UTcPartyComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 
 ATcCharacter* UTcPartyComponent::GetCurrentPartyMember() const
 {
-	if (ATcPlayerState* TcPS = Cast<ATcPlayerState>(GetOwner()))
+	if (APawn* Pawn = OwningPlayerController->GetPawn())
 	{
-		if (APawn* Pawn = TcPS->GetPawn())
-		{
-			return Cast<ATcCharacter>(Pawn);
-		}
+		return Cast<ATcCharacter>(Pawn);
 	}
+	
 	return nullptr;
 }
 
