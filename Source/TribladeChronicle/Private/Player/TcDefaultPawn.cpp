@@ -3,21 +3,15 @@
 
 #include "Player/TcDefaultPawn.h"
 
-#include "Net/UnrealNetwork.h"
 #include "Player/TcPartyComponent.h"
 #include "Player/TcPlayerController.h"
 
 ATcDefaultPawn::ATcDefaultPawn()
 {
 	PrimaryActorTick.bCanEverTick = false;
-
-}
-
-void ATcDefaultPawn::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME(ThisClass, PartyData);
+	
+	// I don't use it as a player character
+	InitialLifeSpan = 10.f;
 }
 
 void ATcDefaultPawn::BeginPlay()
@@ -28,7 +22,7 @@ void ATcDefaultPawn::BeginPlay()
 	{
 		if (UTcPartyComponent* PartyComponent = TcPlayerController->GetPartyComponent())
 		{
-			PartyComponent->InitializePartySystem(PartyData);
+			PartyComponent->Server_RequestInitializePartySystem();
 		}
 	}
 }

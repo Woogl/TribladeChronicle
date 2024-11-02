@@ -8,6 +8,10 @@
 
 class UTcPartyData;
 
+/**
+ * TcGameMode use it as a default pawn class.
+ * But it's only used for player initialization process.
+ */
 UCLASS()
 class TRIBLADECHRONICLE_API ATcDefaultPawn : public APawn
 {
@@ -18,8 +22,4 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-
-private:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Replicated, Category = "TC|Pawn Data", meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UTcPartyData> PartyData;
 };

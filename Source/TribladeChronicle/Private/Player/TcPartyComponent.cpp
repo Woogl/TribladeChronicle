@@ -15,6 +15,11 @@ UTcPartyComponent::UTcPartyComponent()
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
+void UTcPartyComponent::Server_RequestInitializePartySystem_Implementation()
+{
+	InitializePartySystem(PartyData);
+}
+
 void UTcPartyComponent::InitializePartySystem(UTcPartyData* InPartyData)
 {
 	OwningPlayerController = Cast<ATcPlayerController>(GetOwner());
@@ -23,9 +28,13 @@ void UTcPartyComponent::InitializePartySystem(UTcPartyData* InPartyData)
 	OwningPawn = OwningPlayerController->GetPawn();
 	check(OwningPawn);
 
-	PartyData = InPartyData;
-
+	// TODO: Use InPartyData
 	Server_SpawnPartyMembers();
+	
+	if (OwningPlayerController && PartyMembers.IsValidIndex(0))
+	{
+		OwningPlayerController->Possess(PartyMembers[0]);
+	}
 }
 
 void UTcPartyComponent::Server_SpawnPartyMembers_Implementation()
@@ -34,7 +43,7 @@ void UTcPartyComponent::Server_SpawnPartyMembers_Implementation()
 	{
 		return;
 	}
-	UWorld* World = OwningPawn->GetWorld();
+	UWorld* World = OwningPlayerController->GetWorld();
 	if (World && PartyData)
 	{
 		for (TSubclassOf<ATcHeroCharacter> MemberClass : PartyData->PartyMembers)
@@ -47,8 +56,6 @@ void UTcPartyComponent::Server_SpawnPartyMembers_Implementation()
 			PartyMembers.Add(NewMember);
 		}
 	}
-	
-	OwningPlayerController->Possess(PartyMembers[0]);
 }
 
 void UTcPartyComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

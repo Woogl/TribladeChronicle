@@ -11,6 +11,10 @@ class ATcPlayerController;
 class UTcPartyData;
 class ATcCharacter;
 
+/*
+ * A Component for managing party members.
+ * Owner is a TcPlayerController.
+ */
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TRIBLADECHRONICLE_API UTcPartyComponent : public UActorComponent
 {
@@ -19,7 +23,8 @@ class TRIBLADECHRONICLE_API UTcPartyComponent : public UActorComponent
 public:	
 	UTcPartyComponent();
 
-	void InitializePartySystem(UTcPartyData* InPartyData);
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	void Server_RequestInitializePartySystem();
 	
 	UFUNCTION(BlueprintCallable)
 	ATcCharacter* GetCurrentPartyMember() const;
@@ -36,8 +41,10 @@ public:
 private:
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void Server_SpawnPartyMembers();
+
+	void InitializePartySystem(UTcPartyData* InPartyData);
 	
-	UPROPERTY(Replicated)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Replicated, Category = "TC|Pawn Data", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UTcPartyData> PartyData;
 	
 	UPROPERTY(Replicated)

@@ -73,7 +73,7 @@ void ATcHeroCharacter::PossessedBy(AController* NewController)
 	Super::PossessedBy(NewController);
 
 	// Init ability actor info for the Server
-	GetTcAbilitySystemComponent()->InitializeAbilitySystem(PawnData, GetTcPlayerState(), this);
+	GetTcAbilitySystemComponent()->InitializeAbilitySystem(PawnData, GetPlayerState(), this);
 }
 
 void ATcHeroCharacter::UnPossessed()
@@ -87,7 +87,10 @@ void ATcHeroCharacter::OnRep_PlayerState()
 	Super::OnRep_PlayerState();
 
 	// Init ability actor info for the Client
-	GetTcAbilitySystemComponent()->InitializeAbilitySystem(PawnData, GetTcPlayerState(), this);
+	if (GetPlayerState()) // PlayerState can be null during unpossessing.
+	{
+		GetTcAbilitySystemComponent()->InitializeAbilitySystem(PawnData, GetPlayerState(), this);
+	}
 }
 
 void ATcHeroCharacter::FinishDestroy()

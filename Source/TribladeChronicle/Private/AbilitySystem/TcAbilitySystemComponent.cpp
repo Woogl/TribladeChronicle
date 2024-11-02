@@ -27,11 +27,6 @@ void UTcAbilitySystemComponent::InitializeAbilitySystem(UTcPawnData* InPawnData,
 
 	UE_LOG(LogTc, Verbose, TEXT("Setting up ASC [%s] on pawn [%s] owner [%s], existing [%s] "), *GetNameSafe(this), *GetNameSafe(InAvatarActor), *GetNameSafe(InOwnerActor), *GetNameSafe(ExistingAvatar));
 
-	if ((ExistingAvatar != nullptr) && (ExistingAvatar != InAvatarActor))
-	{
-		UE_LOG(LogTc, Log, TEXT("Existing avatar (authority=%d)"), ExistingAvatar->HasAuthority() ? 1 : 0);
-	}
-
 	InitAbilityActorInfo(InOwnerActor, InAvatarActor);
 
 	check(InPawnData);
